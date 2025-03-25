@@ -30,9 +30,9 @@ class App {
   }
 
   private router(): void {
-    const masivoServiceUrl = "http://masivos:8001"; //"http://host.docker.internal:8001";
-    const gestorServiceUrl = "http://gestor-archivos:8002"; //"http://host.docker.internal:8002";
-    const leadsServiceUrl = "http://leads:8003"; //"http://host.docker.internal:8003";
+    const masivoServiceUrl = process.env.MASIVOS_SERVICE_URL ?? "http://host.docker.internal:8001";
+    const gestorServiceUrl = process.env.GESTOR_SERVICE_URL ?? "http://host.docker.internal:8002";
+    const leadsServiceUrl = process.env.LEADS_SERVICE_URL ?? "http://host.docker.internal:8003";
     this.server.use(
       "/api/masivo",
       createProxyMiddleware({
