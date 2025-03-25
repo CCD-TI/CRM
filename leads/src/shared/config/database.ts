@@ -12,7 +12,7 @@ class Database {
 
     init() {
         try {
-            const name = process.env.DB_NAME || "mastercrm";
+            const name = process.env.DB_NAME || "leadsccd";
             const user = process.env.DB_USER || "paul";
             const password = process.env.DB_PASSWORD || "paulp";
             const dialect = (process.env.DB_DIALECT as Dialect) || 'mysql'

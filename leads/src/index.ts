@@ -14,9 +14,9 @@ async function main(): Promise<void> {
     if(process.env.LOAD_DATA === 'true'){
       await seedData(); // Cargar datos iniciales
     }
-
-    httpServer.listen(3001, '0.0.0.0', () => {
-      console.log(`Server is running on http://localhost:3001`);
+    const port = Number(process.env.PORT || 8003);
+    httpServer.listen(port, '0.0.0.0', () => {
+      console.log(`Server is running on http://localhost:${port}`);
     });
       
   } catch (error) {

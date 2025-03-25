@@ -18,25 +18,38 @@ class App {
       this.routes();
     }
     private middlewares(): void {
+      this.server.use((req, _res, next) => {
+        console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+        console.log('Headers:', req.headers);
+        console.log('Body:', req);
+        
+        next();
+      });
       this.server.use(
-        cors()
+        cors({
+          origin: "*",
+          methods: ["GET", "POST", "PUT", "DELETE"],
+          allowedHeaders: ["Content-Type", "Authorization"]
+        })
       );
+      this.server.options("*", cors());
       this.server.use(express.json());
+      
       //this.server.use("/documentation", swaggerUi.serve, swaggerUi.setup(swaggerSetup))
     }
     private routes(): void {
       // Configuración de rutas
-      //this.server.use("/api", UserRoutes);
-      this.server.use("/api/auth", UsuariosRouter);
+      //this.server.use("", UserRoutes);
+      this.server.use("/auth", UsuariosRouter);
       //this.server.use(Authorization);
-      this.server.use("/api/bots",BotRouter);
-      this.server.use("/api/masivos", MasivosRouter);
-      this.server.use("/api/leads",  LeadsRouter);
-      this.server.use("/api/flows",  FlowsRouter);
-      this.server.use("/api/asignaciones",  AsignacionesRouter);
-      this.server.use("/api/reports",  ReportsRouter);
-      this.server.use("/api/archivos", ArchivoRouter);
-      this.server.use("/api/sheets", SheetsRouter);
+      this.server.use("/bots",BotRouter);
+      this.server.use("/masivos", MasivosRouter);
+      this.server.use("/leads",  LeadsRouter);
+      this.server.use("/flows",  FlowsRouter);
+      this.server.use("/asignaciones",  AsignacionesRouter);
+      this.server.use("/reports",  ReportsRouter);
+      this.server.use("/archivos", ArchivoRouter);
+      this.server.use("/sheets", SheetsRouter);
     }
     public getServer(): Application {
       return this.server;

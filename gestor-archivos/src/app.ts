@@ -15,12 +15,18 @@ class App {
         cors()
       );
       this.server.use(express.json());
+      this.server.use((req, _res, next) => {
+        console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+        console.log('Body:', req.body);
+        
+        next();
+      });
       //this.server.use("/documentation", swaggerUi.serve, swaggerUi.setup(swaggerSetup))
     }
     private routes(): void {
       //this.server.use("/api", UserRoutes);
-      this.server.use("/api/gestor", GestorRouter);
-      this.server.use("/api/auth", AuthRoter);
+      this.server.use("/gestor", GestorRouter);
+      this.server.use("/auth", AuthRoter);
     }
     public getServer(): Application {
       return this.server;

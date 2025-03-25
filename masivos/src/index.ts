@@ -40,11 +40,13 @@ async function main(): Promise<void> {
         console.log(`✅ Ejecutando tarea #${job.id} - ${new Date().toISOString()}`);
         await sendAsignacionProgramada(job.data);
       },
-      { connection}
+      { connection }
     );
-    //escucha del servidor en puerto 8000
-    httpServer.listen(8000, '0.0.0.0', () => {
-      console.log(`Server is running on http://localhost:8000`);
+    //escucha del servidor en puerto 8001
+    const port = Number(process.env.PORT || 8001);
+    
+    httpServer.listen(port, '0.0.0.0', () => {
+      console.log(`Server is running on http://localhost:${port}`);
     });
     
   } catch (error) {

@@ -1,7 +1,14 @@
+import { config } from "dotenv";
+config();
 import app from "./app";
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-  console.log(`Gateway corriendo en el puerto ${PORT}`);
-});
+async function main() {
+  try {
+    const puerto = process.env.PUERTO ?? 8000;
+    app.listen(puerto, () => {
+      console.log(`Servidor corriendo en el puerto ${puerto}`);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
+main();

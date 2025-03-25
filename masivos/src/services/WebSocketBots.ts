@@ -11,7 +11,7 @@ export class WebSocketBots {
         origin: "*", // Ajusta el origen según tus necesidades
         methods: ["GET", "POST"],
       },
-      path:"/api/websocket"
+      path:"/websocket"
     });
     this.setupConnection();
     this.startCheck();

@@ -1,63 +1,69 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
 import cors from "cors";
-import axios from "axios";
+import {
+  createProxyMiddleware,
+  debugProxyErrorsPlugin,
+  errorResponsePlugin,
+  loggerPlugin,
+  Options,
+  proxyEventsPlugin,
+} from "http-proxy-middleware";
+import dotenv from "dotenv";
 
-// Rutas de los microservicios
-const SERVICE_LEADS_URL = "http://maestro:3001";
-const SERVICE_CURSOS_URL = "http://storage:3002";
-const SERVICE_USUARIOS_URL = "http://usuarios:3003";
+dotenv.config();
+
+interface ServiceConfig {
+  target: string;
+  routes: string[];
+}
 
 class App {
   public server: express.Application;
-
   constructor() {
     this.server = express();
     this.middlewares();
-    this.routes();
+    this.router();
   }
 
   private middlewares(): void {
-    this.server.use(express.json());
     this.server.use(cors());
   }
 
-  private routes(): void {
-    this.server.use("/api/leads", (req: Request, res: Response) => {
-      const url = `${SERVICE_LEADS_URL}${req.url}`;
-      this.handleRequest(req, res, url);
-    });
-
-    this.server.use("/api/cursos", (req: Request, res: Response) => {
-      const url = `${SERVICE_CURSOS_URL}${req.url}`;
-      this.handleRequest(req, res, url);
-    });
-
-    this.server.use("/api/usuarios", (req: Request, res: Response) => {
-      const url = `${SERVICE_USUARIOS_URL}${req.url}`;
-      this.handleRequest(req, res, url);
-    });
-  }
-
-  private async handleRequest(req: Request, res: Response, url: string): Promise<void> {
-    try {
-      const headers = { ...req.headers };
-      delete headers["content-length"];
-
-      const response = await axios({
-        method: req.method,
-        url: url,
-        data: req.body,
-        headers: headers,
-      });
-
-      res.status(response.status).json(response.data);
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        res.status(error.response.status).json(error.response.data);
-      } else {
-        res.status(500).json({ error: "Error interno del servidor" });
-      }
-    }
+  private router(): void {
+    const masivoServiceUrl = "http://masivos:8001"; //"http://host.docker.internal:8001";
+    const gestorServiceUrl = "http://gestor-archivos:8002"; //"http://host.docker.internal:8002";
+    const leadsServiceUrl = "http://leads:8003"; //"http://host.docker.internal:8003";
+    this.server.use(
+      "/api/masivo",
+      createProxyMiddleware({
+        target: masivoServiceUrl,
+        ws: true,
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api/masivo": "",
+        }
+      })
+    );
+    this.server.use(
+      "/api/gestor-archivos",
+      createProxyMiddleware({
+        target: gestorServiceUrl,
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api/gestor-archivos": "",
+        },
+      })
+    );
+    this.server.use(
+      "/api/leads-service",
+      createProxyMiddleware({
+        target: leadsServiceUrl,
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api/leads-service": "",
+        },
+      })
+    );
   }
 }
 

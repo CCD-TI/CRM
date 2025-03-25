@@ -1,0 +1,7 @@
+CREATE DATABASE IF NOT EXISTS masivosccd;
+CREATE DATABASE IF NOT EXISTS gestorccd;
+CREATE DATABASE IF NOT EXISTS leadsccd;
+
+GRANT ALL PRIVILEGES ON masivosccd.* TO 'paul'@'%';
+GRANT ALL PRIVILEGES ON gestorccd.* TO 'paul'@'%';
+GRANT ALL PRIVILEGES ON leadsccd.* TO 'paul'@'%';

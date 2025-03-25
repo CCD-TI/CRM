@@ -28,13 +28,11 @@ export class UsuariosController {
     }
     login = async (req: any, res: any) => {
         const {username, password} = req.body;
-        console.log(username,password);
         try {
             const EntidadEncontrada = await Usuarios.findOne({
                 where: { username },
                 include: { model: Roles, attributes: ["id", "name"] },
             });
-            console.log(EntidadEncontrada);
             if (!EntidadEncontrada) {
                 return res.status(404).json({ message: "Usuario not found" });
             }

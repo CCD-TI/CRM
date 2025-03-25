@@ -1,6 +1,25 @@
 version: "3.9"
 
 services:
+  rabbitmq:
+    image: rabbitmq:4.0-management
+    container_name: rabbitmq
+    restart: always
+    networks:
+      - bot-network
+    ports:
+      - "5672:5672"   # Puerto para conexiones de RabbitMQ
+      - "15672:15672" # Puerto para la interfaz de administración
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    networks:
+      - bot-network
+    ports:
+      - "6379:6379"   # Puerto para Redis
+
   mysql:
     image: mysql:8
     container_name: mysql
@@ -16,8 +35,72 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - bot-network
     volumes:
       - mysql_data:/var/lib/mysql
       #- ./init-scripts:/docker-entrypoint-initdb.d
+  
+  gateway:
+    build:
+      context: ./gateway
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./gateway/.env
+    networks:
+      - bot-network
+    command: ["npm", "run", "start"]
+  
+  masivos:
+    build:
+      context: ./masivos
+    ports:
+      - "8001:8001"
+    env_file:
+      - ./masivos/.env
+    depends_on:
+      rabbitmq:
+        condition: service_started
+      redis:
+        condition: service_started
+      mysql:
+        condition: service_healthy
+    volumes:
+      - //./pipe/docker_engine:/var/run/docker.sock
+    networks:
+      - bot-network
+    command: ["npm", "run", "start"]
+
+  gestor-archivos:
+    build:
+      context: ./gestor-archivos
+    ports:
+      - "8002:8002"
+    env_file:
+      - ./gestor-archivos/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bot-network
+    command: ["npm", "run", "start"]
+
+  leads: 
+    build:
+      context: ./leads
+    ports:
+      - "8003:8003"
+    env_file:
+      - ./leads/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bot-network
+    command: ["npm", "run", "start"]
 volumes:
   mysql_data:
+networks:
+  bot-network:
+    driver: bridge

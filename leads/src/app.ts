@@ -23,10 +23,10 @@ class App {
 
     private routes(): void {
         // this.server.use("/api/usuarios", UsuarioRoutes);
-        this.server.use("/api/campana", CampanaRouter);
-        this.server.use("/api/leads", LeadRouter);
-        this.server.use("/api/formulario", FormularioRouter);
-        this.server.use("/api/pagina", PaginaRouter);
+        this.server.use("/campana", CampanaRouter);
+        this.server.use("/leads", LeadRouter);
+        this.server.use("/formulario", FormularioRouter);
+        this.server.use("/pagina", PaginaRouter);
     }
 
     public getServer(): Application {
