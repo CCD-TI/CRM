@@ -1,20 +1,9 @@
-export default class Usuario {
+export default class Curso {
     constructor(
-        public IdUsuario: number,
-        public Usuario: string,
-        public Clave: string,
-        public ClaveTemporal: string,
-        public Fcingreso: Date,
-        public FCBaja: Date,
-        public RutalmagenPerfil: string,
-        public RutalmagenCuerpo: string,
-        public Entidad_id: number,
-        public Online: boolean,
-        public Estado_id: number,
-        public UltimaFechMod: Date,
-        public UltimoUserMod: string,
-        public Premium: number,
-        public FechaExpiracionPre: Date,
-        public FechaExpiracion: Date
+        public nombre: string,
+        public flowId: number,
+        public flowNombre: string,
+        public templateNombre: string,
+        public id?: number
     ) {}
 }
