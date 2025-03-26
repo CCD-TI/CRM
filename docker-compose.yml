@@ -99,6 +99,19 @@ services:
     networks:
       - bot-network
     command: ["npm", "run", "start"]
+  storage: 
+    build:
+      context: ./storage
+    ports:
+      - "8004:8004"
+    env_file:
+      - ./storage/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bot-network
+    command: ["npm", "run", "start"]
 volumes:
   mysql_data:
 networks:

@@ -12,9 +12,9 @@ class Database {
 
     init() {
         try {
-            const name = process.env.DB_NAME || "storeCCD";
-            const user = process.env.DB_USER || "fzdiegooo";
-            const password = process.env.DB_PASSWORD || "DBRubik1";
+            const name = process.env.DB_NAME || "storageccd";
+            const user = process.env.DB_USER || "paul";
+            const password = process.env.DB_PASSWORD || "paulp";
             const dialect: Dialect = "mysql";  // Cambiado a MySQL
             const host = process.env.DB_HOST || "localhost";
             const port = parseInt(process.env.DB_PORT || "3306");  // Puerto por defecto de MySQL

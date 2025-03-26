@@ -10,9 +10,9 @@ async function main(): Promise<void> {
     await database.sync();
       
     const httpServer = createServer(app); //escucha del servidor en puerto 8000
-
-    httpServer.listen(8003, '0.0.0.0', () => {
-      console.log(`Server is running on http://localhost:8003`);
+    const port = Number(process.env.PORT ?? 8004);
+    httpServer.listen(port, '0.0.0.0', () => {
+      console.log(`Server is running on http://localhost:${port}`);
     });
       
   } catch (error) {

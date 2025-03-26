@@ -33,6 +33,7 @@ class App {
     const masivoServiceUrl = process.env.MASIVOS_SERVICE_URL ?? "http://host.docker.internal:8001";
     const gestorServiceUrl = process.env.GESTOR_SERVICE_URL ?? "http://host.docker.internal:8002";
     const leadsServiceUrl = process.env.LEADS_SERVICE_URL ?? "http://host.docker.internal:8003";
+    const storageServiceUrl = process.env.STORAGE_SERVICE_URL ?? "http://host.docker.internal:8004";
     this.server.use(
       "/api/masivo",
       createProxyMiddleware({
@@ -61,6 +62,16 @@ class App {
         changeOrigin: true,
         pathRewrite: {
           "^/api/leads-service": "",
+        },
+      })
+    );
+    this.server.use(
+      "/api/storage",
+      createProxyMiddleware({
+        target: storageServiceUrl,
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api/storage": "",
         },
       })
     );

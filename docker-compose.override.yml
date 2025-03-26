@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  gateway:
+    volumes:
+      - ./gateway:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev"]
+
+  masivos:
+    volumes:
+      - ./masivos:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev"]
+
+  gestor-archivos:
+    volumes:
+      - ./gestor-archivos:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev"]
+
+  leads:
+    volumes:
+      - ./leads:/app
+      - /app/node_modules
+    command: ["npm", "run", "dev"]

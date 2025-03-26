@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const SheetsController_1 = require("../controllers/sheets/SheetsController");
+const SheetsRouter = (0, express_1.Router)();
+const sheetsController = new SheetsController_1.SheetsController();
+SheetsRouter.post("/", sheetsController.createNewSheet);
+SheetsRouter.get("/", sheetsController.getAllSheets);
+SheetsRouter.post("/search", sheetsController.search);
+SheetsRouter.put("/:id", sheetsController.editSheet);
+SheetsRouter.delete("/:id", sheetsController.deleteSheet);
+//SheetsRouter.post("/setSheet", sheetsController.setActiveSheet);
+//SheetsRouter.get("/getActiveSheet", sheetsController.getActiveSheet);
+exports.default = SheetsRouter;

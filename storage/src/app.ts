@@ -18,8 +18,8 @@ class App {
     }
 
     private routes(): void {
-        this.server.use("/api/bot-curso", botCursoRoutes);
-        this.server.use("/api/curso", cursoRoutes);
+        this.server.use("/bot-curso", botCursoRoutes);
+        this.server.use("/curso", cursoRoutes);
 
     }
 
