@@ -10,11 +10,38 @@ const botCursoService = new BotCursoService(botCursoRepository);
 export class BotCursoController {
     static async createBotCurso(req: Request, res: Response) {
         try {
-            console.log("Recibido:", req.body); // 👉 Verifica los datos recibidos
-            const botCurso = botCursoSchema.parse(req.body);
-            const newBotCurso = await botCursoService.createBotCurso(botCurso);
-            console.log("Creado:", newBotCurso); // 👉 Verifica que la creación funcionó
-            res.status(201).json(newBotCurso);
+            console.log("Datos recibidos:", req.body);
+            
+            // 1. Validar la estructura de los datos
+            const validatedData = botCursoSchema.parse(req.body);
+            
+            // 2. Verificar consistencia de arrays paralelos
+            if (validatedData.botsId.length !== validatedData.botsNombre.length) {
+                    res.status(400).json({
+                    error: "Los arrays botsId y botsNombre deben tener la misma longitud"
+                });
+            }
+    
+            // 3. Crear todas las relaciones bot-curso
+            const createdRelations = await Promise.all(
+                validatedData.botsId.map((botId: any, index: string | number) => 
+                    botCursoService.createBotCurso({
+                        cursoId: validatedData.cursoId,
+                        botId,
+                        botNombre: validatedData.botsNombre[index]
+                    })
+                )
+            );
+    
+            console.log("Relaciones creadas:", createdRelations);
+            
+            // 4. Responder con todas las relaciones creadas
+            res.status(201).json({
+                cursoId: validatedData.cursoId,
+                createdRelations,
+                count: createdRelations.length
+            });
+            
         } catch (error) {
             console.error("Error en createBotCurso:", error); // 👉 Muestra el error
             res.status(500).json({ error: "Error creating BotCurso" });
