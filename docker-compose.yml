@@ -125,6 +125,19 @@ services:
     networks:
       - bot-network
     command: ["npm", "run", "start"]
+  mailing: 
+    build:
+      context: ./mailing
+    ports:
+      - "8006:8006"
+    env_file:
+      - ./mailing/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bot-network
+    command: ["npm", "run", "start"]
 volumes:
   mysql_data:
 networks:
