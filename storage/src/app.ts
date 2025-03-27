@@ -1,6 +1,5 @@
 import botCursoRoutes from "./modules/BotCurso/infraestruture/BotCurso.Routes";
 import cursoRoutes from "./modules/Curso/infraestruture/Curso.Routes";
-import CourseRoutes from "./modules/Course/infraestructure/Course.Routes"
 import express, { Application } from "express";
 import cors from "cors";
 
@@ -21,7 +20,7 @@ class App {
     private routes(): void {
         this.server.use("/bot-curso", botCursoRoutes);
         this.server.use("/curso", cursoRoutes);
-        this.server.use("/course",CourseRoutes );
+      
 
     }
 

@@ -6,5 +6,5 @@ export interface CursoRepository {
   delete(id: number): Promise<void>;
   findAll(): Promise<Curso[]>;
   findById(id: number): Promise<Curso>;
-  findCursoCCDById(cursoCCDId: number): Promise<any | null>; // 👈 Agregamos este método
+  
 }

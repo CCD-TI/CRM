@@ -8,21 +8,13 @@ const cursoRepository: CursoRepository = new SequelizeCursoRepository();
 const cursoService = new CursoService(cursoRepository);
 
 export class CursoController{
-    static async createCurso(req: Request, res: Response) {
+    static async createCurso(req: Request, res: Response){
         try {
             const parsedData = cursoSchema.parse(req.body);
-
-            // Verificar si el cursoCCDId existe antes de crearlo
-            const cursoCCD = await cursoService.findCursoCCDById(parsedData.cursoCCDId);
-            if (!cursoCCD) {
-                 res.status(404).json({ message: "CursoCCD no encontrado" });
-            }
-
-            // Crear el curso con la referencia
             const curso = await cursoService.createCurso(parsedData);
             res.status(201).json(curso);
         } catch (error) {
-            res.status(400).json({ message: error });
+            res.status(400).json({ message: error});
         }
     }
 
