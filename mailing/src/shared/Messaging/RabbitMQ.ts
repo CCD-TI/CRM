@@ -3,10 +3,10 @@ import amqp, { Connection, Channel } from "amqplib";
 
 const rabbitSettings = {
   protocol: "amqp",
-  hostname: "host.docker.internal",
+  hostname: "rabbitmq",
   port: 5672,
-  username: "vac",
-  password: "vac",
+  username: "guest",
+  password: "guest",
   vhost: "/",
   authMechanism: ["PLAIN", "AMQPLAIN", "EXTERNAL"],
 };

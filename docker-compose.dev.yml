@@ -8,8 +8,8 @@ services:
     networks:
       - bot-network
     ports:
-      - "5672:5672"   # Puerto para conexiones de RabbitMQ
-      - "15672:15672" # Puerto para la interfaz de administración
+      - "5672:5672"
+      - "15672:15672"
 
   redis:
     image: redis:latest
@@ -18,7 +18,7 @@ services:
     networks:
       - bot-network
     ports:
-      - "6379:6379"   # Puerto para Redis
+      - "6379:6379"
 
   mysql:
     image: mysql:8
@@ -30,8 +30,7 @@ services:
     ports:
       - "3307:3306"
     healthcheck:
-      test:
-        ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -40,7 +39,7 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init-scripts:/docker-entrypoint-initdb.d
-  
+
   gateway:
     build:
       context: ./gateway
@@ -50,8 +49,15 @@ services:
       - ./gateway/.env
     networks:
       - bot-network
-    command: ["npm", "run", "start"]
-  
+    command: ["npm", "run", "dev"]
+    develop:
+      watch:
+        - action: sync
+          path: ./gateway
+          target: /app
+          ignore:
+            - node_modules/
+
   masivos:
     build:
       context: ./masivos
@@ -70,7 +76,14 @@ services:
       - //./pipe/docker_engine:/var/run/docker.sock
     networks:
       - bot-network
-    command: ["npm", "run", "start"]
+    command: ["npm", "run", "dev"]
+    develop:
+      watch:
+        - action: sync
+          path: ./masivos
+          target: /app
+          ignore:
+            - node_modules/
 
   gestor-archivos:
     build:
@@ -84,9 +97,16 @@ services:
         condition: service_healthy
     networks:
       - bot-network
-    command: ["npm", "run", "start"]
+    command: ["npm", "run", "dev"]
+    develop:
+      watch:
+        - action: sync
+          path: ./gestor-archivos
+          target: /app
+          ignore:
+            - node_modules/
 
-  leads: 
+  leads:
     build:
       context: ./leads
     ports:
@@ -98,8 +118,16 @@ services:
         condition: service_healthy
     networks:
       - bot-network
-    command: ["npm", "run", "start"]
-  storage: 
+    command: ["npm", "run", "dev"]
+    develop:
+      watch:
+        - action: sync
+          path: ./leads
+          target: /app
+          ignore:
+            - node_modules/
+
+  storage:
     build:
       context: ./storage
     ports:
@@ -111,8 +139,16 @@ services:
         condition: service_healthy
     networks:
       - bot-network
-    command: ["npm", "run", "start"]
-  usuarios: 
+    command: ["npm", "run", "dev"]
+    develop:
+      watch:
+        - action: sync
+          path: ./storage
+          target: /app
+          ignore:
+            - node_modules/
+
+  usuarios:
     build:
       context: ./usuarios
     ports:
@@ -124,8 +160,16 @@ services:
         condition: service_healthy
     networks:
       - bot-network
-    command: ["npm", "run", "start"]
-  mailing: 
+    command: ["npm", "run", "dev"]
+    develop:
+      watch:
+        - action: sync
+          path: ./usuarios
+          target: /app
+          ignore:
+            - node_modules/
+
+  mailing:
     build:
       context: ./mailing
     ports:
@@ -137,9 +181,18 @@ services:
         condition: service_healthy
     networks:
       - bot-network
-    command: ["npm", "run", "start"]
+    command: ["npm", "run", "dev"]
+    develop:
+      watch:
+        - action: sync
+          path: ./mailing
+          target: /app
+          ignore:
+            - node_modules/
+
 volumes:
   mysql_data:
+
 networks:
   bot-network:
     driver: bridge

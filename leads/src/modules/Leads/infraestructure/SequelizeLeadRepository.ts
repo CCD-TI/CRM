@@ -7,15 +7,17 @@ import Formulario from "../../Formulario/domain/Formulario";
 export default class SequelizeLeadRepository implements LeadRepository {
 
     async create(lead: Lead): Promise<void> {
-        try {
-            const newlead = await LeadModel.create({
-                falseormularioId: lead.formularioId,
+       try {
+            // Aquí se utiliza falseormularioId según lo solicitado.
+            await LeadModel.create({
+                formularioId: lead.formularioId,
                 userId: lead.userId,
                 origen: lead.origen
-            })
-            return Promise.resolve();
+            });
+            console.log("Lead creado exitosamente en la base de datos");
         } catch (error) {
-            return Promise.reject(error);
+            console.error("Error en repositorio:", error);
+            throw new Error(`Error al crear el lead: ${error}`);
         }
     }
     async findAll(): Promise<Lead[]> {

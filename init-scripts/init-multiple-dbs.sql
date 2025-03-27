@@ -3,9 +3,11 @@ CREATE DATABASE IF NOT EXISTS gestorccd;
 CREATE DATABASE IF NOT EXISTS leadsccd;
 CREATE DATABASE IF NOT EXISTS usuariosccd;
 CREATE DATABASE IF NOT EXISTS storageccd;
+CREATE DATABASE IF NOT EXISTS mailingccd;
 
 GRANT ALL PRIVILEGES ON masivosccd.* TO 'paul'@'%';
 GRANT ALL PRIVILEGES ON gestorccd.* TO 'paul'@'%';
 GRANT ALL PRIVILEGES ON leadsccd.* TO 'paul'@'%';
 GRANT ALL PRIVILEGES ON usuariosccd.* TO 'paul'@'%';
 GRANT ALL PRIVILEGES ON storageccd.* TO 'paul'@'%';
+GRANT ALL PRIVILEGES ON mailingccd.* TO 'paul'@'%';

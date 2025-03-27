@@ -1,6 +1,7 @@
 import FormularioRepository from "@Formulario/domain/FormularioRepository";
 import { FormularioModel } from "./Formulario.model";
-import Formulario from "@Formulario/domain/Formulario";
+import Formulario from "../domain/Formulario";
+import { FormularioSchema } from '@Formulario/domain/Formulario.schema';
 
 export default class SequelizeFormularioRepository implements FormularioRepository{
     async create(formulario: Formulario): Promise<void> {
@@ -55,6 +56,24 @@ export default class SequelizeFormularioRepository implements FormularioReposito
             return Promise.reject(error);
         }
     }
+
+    async findByIdForm(redid: number): Promise<typeof FormularioSchema._output> {
+      try {
+        const formularioModel = await FormularioModel.findOne({ where: { RedFormularioID: redid } });
+        if (!formularioModel) {
+          throw new Error(`Formulario con RedFormularioID ${redid} no encontrado`);
+        }
+        
+        // Valida y transforma el objeto para que cumpla con el schema y el tipo Formulario
+        const formularioValidado = FormularioSchema.parse(formularioModel);
+        
+        return formularioValidado;
+      } catch (error) {
+        console.error("Error en findByIdForm:", error);
+        throw error;
+      }
+    }
+
     async findAll(): Promise<Formulario[]> {
         try {
             const formularios = await FormularioModel.findAll();

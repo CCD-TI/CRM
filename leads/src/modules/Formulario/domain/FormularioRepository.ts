@@ -1,4 +1,5 @@
 import Formulario from "./Formulario"
+import { FormularioSchema } from './Formulario.schema';
 
 export default interface FormularioRepository {
     create(formulario: Formulario): Promise<void>
@@ -6,4 +7,5 @@ export default interface FormularioRepository {
     delete(id: number): Promise<void>
     findById(id: number): Promise<Formulario>
     findAll(): Promise<Formulario[]>
+    findByIdForm(id: number): Promise<typeof FormularioSchema._output>
 }

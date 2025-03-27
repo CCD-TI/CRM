@@ -4,25 +4,20 @@ import Lead from "../domain/Lead";
 import SequelizeLeadRepository from "@Leads/infraestructure/SequelizeLeadRepository";
 
 export default class LeadService {
-    constructor(private LeadRepository: LeadRepository) {
-        this.LeadRepository = new SequelizeLeadRepository();
-    }
+  constructor(private leadRepository: LeadRepository) {}
 
-    async create(lead: Lead): Promise<void> {
+    async create(leadPayload: Lead): Promise<void> {
         try{
-            await this.LeadRepository.create(lead);
-            return Promise.resolve();
+          await this.leadRepository.create(leadPayload);
         }catch(error){
-            return Promise.reject(error);
+          throw new Error(`Error en servicio al crear el lead: ${error}`);
         }
     }
     async findAll(): Promise<Lead[]> {
-        
-        try {
-            const leads = await this.LeadRepository.findAll();
-            return Promise.resolve(leads);
-        } catch (error) {
-            return Promise.reject(error);
-        }
+      try {
+          return await this.leadRepository.findAll();
+      } catch (error) {
+          throw new Error(`Error en servicio al obtener los leads: ${error}`);
+      }
     }
 }   

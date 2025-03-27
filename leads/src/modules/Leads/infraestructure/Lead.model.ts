@@ -1,7 +1,7 @@
 import { Table, Column, Model, AutoIncrement, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { FormularioModel } from '@Formulario/infraestructure/Formulario.model';
 
-@Table({ tableName: 'Lead' })
+@Table({ tableName: 'Lead', timestamps: true})
 export class LeadModel extends Model {
     @ForeignKey(() => FormularioModel)
     @Column(DataType.INTEGER)
@@ -10,7 +10,7 @@ export class LeadModel extends Model {
     @BelongsTo(() => FormularioModel)
     formulario!: FormularioModel;
 
-    @Column(DataType.INTEGER)
+    @Column(DataType.BIGINT)
     userId!: number;
 
     @Column(DataType.STRING)
