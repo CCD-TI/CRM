@@ -117,7 +117,7 @@ export class AuthController {
         user: {
           id: usuario.id,
           email: usuario.email,
-          role: usuario.rol.name,
+          rol: usuario.rol.name,
         },
       });
     } catch (error: any) {
