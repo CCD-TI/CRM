@@ -1,4 +1,5 @@
 import Formulario from "@Formulario/domain/Formulario";
+import { FormularioSchema } from '@Formulario/domain/Formulario.schema';
 import FormularioRepository from "@Formulario/domain/FormularioRepository";
 import SequelizeFormularioRepository from "@Formulario/infraestructure/SequelizeFormularioRepository";
 
@@ -39,6 +40,11 @@ export default class FormularioService {
             return Promise.reject(error);
         }
     }
+
+    async getFormularioByIdForm(redid: number): Promise<typeof FormularioSchema._output> {
+      return await this.formularioRepository.findByIdForm(redid);
+    }
+    
     async findAll(): Promise<Formulario[]>{
         try {
             const formularios = await this.formularioRepository.findAll();

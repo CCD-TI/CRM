@@ -5,7 +5,7 @@ import Lead from "@Leads/domain/Lead";
 const LeadRouter = Router();
 
 LeadRouter.get("/", LeadController.findAll);
-LeadRouter.post("/", LeadController.create);
+LeadRouter.post("/CreateLead", LeadController.create);
 LeadRouter.post("/leadgen", LeadController.leadgen);
 // router.get("/:id", getLeadById);
 

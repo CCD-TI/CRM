@@ -1,0 +1,23 @@
+[
+  {
+      "Platform": "fb",
+      "leadgenId": "3877801352458394",
+      "adId": "xxxx",
+      "formId": "2257885621275694",
+      "pageId": "xxxx",
+      "adgroupId": "xxxx",
+      "createdTime": "2025-03-13T20:16:05+00:00",
+      "formName": "FORM/EXCEL PROFESIONAL/IAC6-EXCEL-02/12/03/17.19",
+      "pageName": "Centro de Capacitación y Desarrollo - CCD",
+      "adName": null,
+      "adSetId": null,
+      "adsetName": null,
+      "campaignId": null,
+      "campaignName": null,
+      "fieldData": {
+          "full_name": "Marlon Esquivel Velasquez",
+          "phone_number": "+51994672069",
+          "email": "marlon_5_7@hotmail.com"
+        }
+  }
+]
