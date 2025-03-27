@@ -3,3 +3,7 @@
 
 # Ignorar todos los archivos .env en cualquier lugar del proyecto
 **/.env
+
+**/dist/
+
+**/build/
