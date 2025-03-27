@@ -8,6 +8,7 @@ exports.cursoSchema = zod_1.z.object({
     flowId: zod_1.z.number().positive("flowId debe ser un número positivo"),
     flowNombre: zod_1.z.string().nonempty("flowNombre no puede estar vacío"),
     templateNombre: zod_1.z.string().nonempty("templateNombre no puede estar vacío"),
+    cursoCCDId: zod_1.z.number(), // 👈 Clave foránea para relacionar con CursosCCD
 });
 // Para actualizar, permitimos que los campos sean opcionales
 exports.cursoUpdateSchema = exports.cursoSchema.partial();

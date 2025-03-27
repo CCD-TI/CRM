@@ -9,37 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CursoModel = void 0;
+exports.CursoCCDModel = void 0;
 const sequelize_typescript_1 = require("sequelize-typescript");
-const Course_model_1 = require("../../Course/infraestructure/Course.model"); // Importamos la tabla CursosCCD
-let CursoModel = class CursoModel extends sequelize_typescript_1.Model {
+const Curso_model_1 = require("../../Curso/infraestruture/Curso.model"); // Importamos la tabla Cursos
+let CursoCCDModel = class CursoCCDModel extends sequelize_typescript_1.Model {
 };
-exports.CursoModel = CursoModel;
+exports.CursoCCDModel = CursoCCDModel;
 __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, allowNull: false }),
     __metadata("design:type", String)
-], CursoModel.prototype, "nombre", void 0);
+], CursoCCDModel.prototype, "curso", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: false }),
+    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, allowNull: false }),
     __metadata("design:type", Number)
-], CursoModel.prototype, "flowId", void 0);
+], CursoCCDModel.prototype, "nomenclatura", void 0);
 __decorate([
     (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, allowNull: false }),
     __metadata("design:type", String)
-], CursoModel.prototype, "flowNombre", void 0);
+], CursoCCDModel.prototype, "estado", void 0);
 __decorate([
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.STRING, allowNull: false }),
-    __metadata("design:type", String)
-], CursoModel.prototype, "templateNombre", void 0);
-__decorate([
-    (0, sequelize_typescript_1.ForeignKey)(() => Course_model_1.CursoCCDModel),
-    (0, sequelize_typescript_1.Column)({ type: sequelize_typescript_1.DataType.INTEGER, allowNull: false }),
-    __metadata("design:type", Number)
-], CursoModel.prototype, "cursoCCDId", void 0);
-__decorate([
-    (0, sequelize_typescript_1.BelongsTo)(() => Course_model_1.CursoCCDModel),
-    __metadata("design:type", Course_model_1.CursoCCDModel)
-], CursoModel.prototype, "cursoCCD", void 0);
-exports.CursoModel = CursoModel = __decorate([
-    (0, sequelize_typescript_1.Table)({ tableName: 'Cursos' })
-], CursoModel);
+    (0, sequelize_typescript_1.HasOne)(() => Curso_model_1.CursoModel),
+    __metadata("design:type", Curso_model_1.CursoModel)
+], CursoCCDModel.prototype, "cursoRelacionado", void 0);
+exports.CursoCCDModel = CursoCCDModel = __decorate([
+    (0, sequelize_typescript_1.Table)({ tableName: 'CursosCCD' })
+], CursoCCDModel);

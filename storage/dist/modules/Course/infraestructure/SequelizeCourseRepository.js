@@ -9,28 +9,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SequelizeCursoRepository = void 0;
-const Course_model_1 = require("../../Course/infraestructure/Course.model");
-const Curso_model_1 = require("./Curso.model");
-class SequelizeCursoRepository {
+exports.SequelizeCoursesoRepository = void 0;
+const Course_model_1 = require("./Course.model");
+class SequelizeCoursesoRepository {
     //En todos los metodos le pongo plain true para que me devuelva
     //un objeto sin la metadata de sequelize
     create(curso) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log("CursoRepository.create");
-            const cursoCreated = yield Curso_model_1.CursoModel.create(curso);
+            const cursoCreated = yield Course_model_1.CursoCCDModel.create(curso);
             return cursoCreated.get({ plain: true });
         });
     }
     findAll() {
         return __awaiter(this, void 0, void 0, function* () {
-            const cursos = yield Curso_model_1.CursoModel.findAll();
+            const cursos = yield Course_model_1.CursoCCDModel.findAll();
             return cursos.map((curso) => curso.get({ plain: true }));
         });
     }
     findById(cursoId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const curso = yield Curso_model_1.CursoModel.findOne({ where: { id: cursoId } });
+            const curso = yield Course_model_1.CursoCCDModel.findOne({ where: { id: cursoId } });
             if (!curso)
                 throw new Error('Curso not found');
             return curso.get({ plain: true });
@@ -38,22 +37,17 @@ class SequelizeCursoRepository {
     }
     update(id, curso) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield Curso_model_1.CursoModel.update(curso, { where: { id } });
+            yield Course_model_1.CursoCCDModel.update(curso, { where: { id } });
             return curso;
         });
     }
     delete(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const curso = yield Curso_model_1.CursoModel.findOne({ where: { id } });
+            const curso = yield Course_model_1.CursoCCDModel.findOne({ where: { id } });
             if (!curso)
                 throw new Error("Curso no encontrado");
-            yield Curso_model_1.CursoModel.destroy({ where: { id } });
-        });
-    }
-    findCursoCCDById(cursoCCDId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield Course_model_1.CursoCCDModel.findByPk(cursoCCDId); // 👈 Busca por ID en CursosCCD
+            yield Course_model_1.CursoCCDModel.destroy({ where: { id } });
         });
     }
 }
-exports.SequelizeCursoRepository = SequelizeCursoRepository;
+exports.SequelizeCoursesoRepository = SequelizeCoursesoRepository;

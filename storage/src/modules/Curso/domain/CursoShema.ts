@@ -6,6 +6,7 @@ export const cursoSchema = z.object({
     flowId: z.number().positive("flowId debe ser un número positivo"),
     flowNombre: z.string().nonempty("flowNombre no puede estar vacío"),
     templateNombre: z.string().nonempty("templateNombre no puede estar vacío"),
+    cursoCCDId: z.number(), // 👈 Clave foránea para relacionar con CursosCCD
 });
 
 // Para actualizar, permitimos que los campos sean opcionales

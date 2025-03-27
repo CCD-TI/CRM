@@ -9,41 +9,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CursoService = void 0;
-const Course_model_1 = require("../../Course/infraestructure/Course.model");
-class CursoService {
-    constructor(cursoRepository) {
-        this.cursoRepository = cursoRepository;
+exports.CourseService = void 0;
+class CourseService {
+    constructor(courseRepository) {
+        this.courseRepository = courseRepository;
     }
-    createCurso(curso) {
+    createCurso(course) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.cursoRepository.create(curso);
+            return yield this.courseRepository.create(course);
         });
     }
-    updateCurso(id, curso) {
+    updateCurso(id, course) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.cursoRepository.update(id, curso);
+            return yield this.courseRepository.update(id, course);
         });
     }
     deleteCurso(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.cursoRepository.delete(id);
+            return yield this.courseRepository.delete(id);
         });
     }
     findAllCursos() {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.cursoRepository.findAll();
+            return yield this.courseRepository.findAll();
         });
     }
     findCursoById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield this.cursoRepository.findById(id);
-        });
-    }
-    findCursoCCDById(cursoCCDId) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield Course_model_1.CursoCCDModel.findByPk(cursoCCDId); // 👈 Busca por ID en CursosCCD
+            return yield this.courseRepository.findById(id);
         });
     }
 }
-exports.CursoService = CursoService;
+exports.CourseService = CourseService;

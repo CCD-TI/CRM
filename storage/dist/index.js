@@ -19,12 +19,14 @@ const app_1 = __importDefault(require("./app"));
 const database_1 = __importDefault(require("./shared/config/database"));
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
+        var _a;
         try {
             //sincronizacion con la base de datos
             yield database_1.default.sync();
             const httpServer = (0, http_1.createServer)(app_1.default); //escucha del servidor en puerto 8000
-            httpServer.listen(8003, '0.0.0.0', () => {
-                console.log(`Server is running on http://localhost:8003`);
+            const port = Number((_a = process.env.PORT) !== null && _a !== void 0 ? _a : 8004);
+            httpServer.listen(port, '0.0.0.0', () => {
+                console.log(`Server is running on http://localhost:${port}`);
             });
         }
         catch (error) {

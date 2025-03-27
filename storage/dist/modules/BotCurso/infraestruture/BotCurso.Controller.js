@@ -19,11 +19,28 @@ class BotCursoController {
     static createBotCurso(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("Recibido:", req.body); // 👉 Verifica los datos recibidos
-                const botCurso = BotCursoSchema_1.botCursoSchema.parse(req.body);
-                const newBotCurso = yield botCursoService.createBotCurso(botCurso);
-                console.log("Creado:", newBotCurso); // 👉 Verifica que la creación funcionó
-                res.status(201).json(newBotCurso);
+                console.log("Datos recibidos:", req.body);
+                // 1. Validar la estructura de los datos
+                const validatedData = BotCursoSchema_1.botCursoSchema.parse(req.body);
+                // 2. Verificar consistencia de arrays paralelos
+                if (validatedData.botsId.length !== validatedData.botsNombre.length) {
+                    res.status(400).json({
+                        error: "Los arrays botsId y botsNombre deben tener la misma longitud"
+                    });
+                }
+                // 3. Crear todas las relaciones bot-curso
+                const createdRelations = yield Promise.all(validatedData.botsId.map((botId, index) => botCursoService.createBotCurso({
+                    cursoId: validatedData.cursoId,
+                    botId,
+                    botNombre: validatedData.botsNombre[index]
+                })));
+                console.log("Relaciones creadas:", createdRelations);
+                // 4. Responder con todas las relaciones creadas
+                res.status(201).json({
+                    cursoId: validatedData.cursoId,
+                    createdRelations,
+                    count: createdRelations.length
+                });
             }
             catch (error) {
                 console.error("Error en createBotCurso:", error); // 👉 Muestra el error

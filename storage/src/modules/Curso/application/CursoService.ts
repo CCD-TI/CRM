@@ -1,3 +1,4 @@
+import { CursoCCDModel } from "../../Course/infraestructure/Course.model";
 import Curso from "../domain/Curso";
 import { CursoRepository } from "../domain/CursoRepository";
 
@@ -17,5 +18,9 @@ export class CursoService{
     }
     async findCursoById(id: number) {
         return await this.cursoRepository.findById(id);
+    }
+
+    async findCursoCCDById(cursoCCDId: number) {
+        return await CursoCCDModel.findByPk(cursoCCDId); // 👈 Busca por ID en CursosCCD
     }
 }

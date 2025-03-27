@@ -10,23 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CursoController = void 0;
-const SequelizeCursoRepository_1 = require("./SequelizeCursoRepository");
-const CursoService_1 = require("../application/CursoService");
-const CursoShema_1 = require("../domain/CursoShema");
-const cursoRepository = new SequelizeCursoRepository_1.SequelizeCursoRepository();
-const cursoService = new CursoService_1.CursoService(cursoRepository);
+const SequelizeCourseRepository_1 = require("./SequelizeCourseRepository");
+const CourseService_1 = require("../application/CourseService");
+const CourseShema_1 = require("../domain/CourseShema");
+const courseRepository = new SequelizeCourseRepository_1.SequelizeCoursesoRepository();
+const courseService = new CourseService_1.CourseService(courseRepository);
 class CursoController {
     static createCurso(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const parsedData = CursoShema_1.cursoSchema.parse(req.body);
-                // Verificar si el cursoCCDId existe antes de crearlo
-                const cursoCCD = yield cursoService.findCursoCCDById(parsedData.cursoCCDId);
-                if (!cursoCCD) {
-                    res.status(404).json({ message: "CursoCCD no encontrado" });
-                }
-                // Crear el curso con la referencia
-                const curso = yield cursoService.createCurso(parsedData);
+                const parsedData = CourseShema_1.cursoSchema.parse(req.body);
+                const curso = yield courseService.createCurso(parsedData);
                 res.status(201).json(curso);
             }
             catch (error) {
@@ -37,7 +31,7 @@ class CursoController {
     static findAllCursos(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const cursos = yield cursoService.findAllCursos();
+                const cursos = yield courseService.findAllCursos();
                 res.status(200).json(cursos);
             }
             catch (error) {
@@ -48,7 +42,7 @@ class CursoController {
     static findCursoById(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const curso = yield cursoService.findCursoById(Number(req.params.id));
+                const curso = yield courseService.findCursoById(Number(req.params.id));
                 res.status(200).json(curso);
             }
             catch (error) {
@@ -60,8 +54,8 @@ class CursoController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const id = Number(req.params.id);
-                const parsedData = CursoShema_1.cursoUpdateSchema.parse(req.body);
-                const curso = yield cursoService.updateCurso(id, parsedData);
+                const parsedData = CourseShema_1.cursoUpdateSchema.parse(req.body);
+                const curso = yield courseService.updateCurso(id, parsedData);
                 res.status(200).json(curso);
             }
             catch (error) {
@@ -72,7 +66,7 @@ class CursoController {
     static deleteCurso(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const curso = yield cursoService.deleteCurso(Number(req.params.id));
+                const curso = yield courseService.deleteCurso(Number(req.params.id));
                 res.status(200).json(curso);
             }
             catch (error) {

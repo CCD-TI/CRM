@@ -1,34 +1,26 @@
-import { CursoRepository } from "../domain/CursoRepository";
-import { SequelizeCursoRepository } from "./SequelizeCursoRepository";
-import { CursoService } from "../application/CursoService";
+import { CourseRepository } from "../domain/CourseRepository";
+import {SequelizeCoursesoRepository } from "./SequelizeCourseRepository";
+import { CourseService } from "../application/CourseService";
 import { Request, Response } from "express";
-import { cursoSchema, cursoUpdateSchema } from "../domain/CursoShema";
+import { cursoSchema, cursoUpdateSchema } from "../domain/CourseShema";
 
-const cursoRepository: CursoRepository = new SequelizeCursoRepository();
-const cursoService = new CursoService(cursoRepository);
+const courseRepository: CourseRepository = new SequelizeCoursesoRepository();
+const courseService = new CourseService(courseRepository);
 
 export class CursoController{
-    static async createCurso(req: Request, res: Response) {
+    static async createCurso(req: Request, res: Response){
         try {
             const parsedData = cursoSchema.parse(req.body);
-
-            // Verificar si el cursoCCDId existe antes de crearlo
-            const cursoCCD = await cursoService.findCursoCCDById(parsedData.cursoCCDId);
-            if (!cursoCCD) {
-                 res.status(404).json({ message: "CursoCCD no encontrado" });
-            }
-
-            // Crear el curso con la referencia
-            const curso = await cursoService.createCurso(parsedData);
+            const curso = await courseService.createCurso(parsedData);
             res.status(201).json(curso);
         } catch (error) {
-            res.status(400).json({ message: error });
+            res.status(400).json({ message: error});
         }
     }
 
     static async findAllCursos(_req: Request, res: Response){
         try {
-            const cursos = await cursoService.findAllCursos();
+            const cursos = await courseService.findAllCursos();
             res.status(200).json(cursos);
         } catch (error) {
             res.status(400).json({ message: error });
@@ -37,7 +29,7 @@ export class CursoController{
 
     static async findCursoById(req: Request, res: Response){
         try {
-            const curso = await cursoService.findCursoById(Number(req.params.id));
+            const curso = await courseService.findCursoById(Number(req.params.id));
             res.status(200).json(curso);
         } catch (error) {
             res.status(400).json({ message: error });
@@ -48,7 +40,7 @@ export class CursoController{
         try {
             const id = Number(req.params.id);
             const parsedData = cursoUpdateSchema.parse(req.body);
-            const curso = await cursoService.updateCurso(id, parsedData);
+            const curso = await courseService.updateCurso(id, parsedData);
             res.status(200).json(curso);
         } catch (error) {
             res.status(400).json({ message: error });
@@ -57,7 +49,7 @@ export class CursoController{
 
     static async deleteCurso(req: Request, res: Response){
         try {
-            const curso = await cursoService.deleteCurso(Number(req.params.id));
+            const curso = await courseService.deleteCurso(Number(req.params.id));
             res.status(200).json(curso);
         } catch (error) {
             res.status(400).json({ message: "No se pudo borrar el curso" });

@@ -1,18 +1,27 @@
-import { Column, DataType, Model, Table } from "sequelize-typescript";
+import { Column, DataType, Model, Table, ForeignKey, BelongsTo } from "sequelize-typescript";
+import { CursoCCDModel } from "../../Course/infraestructure/Course.model"; // Importamos la tabla CursosCCD
 
-@Table({ tableName: 'Cursos' }) // Nombre de la tabla en la base de datos
+@Table({ tableName: 'Cursos' })
 export class CursoModel extends Model {
 
-    @Column(DataType.STRING)
+    @Column({ type: DataType.STRING, allowNull: false })
     nombre!: string;
 
-    @Column(DataType.INTEGER)
+    @Column({ type: DataType.INTEGER, allowNull: false })
     flowId!: number;
 
-    @Column(DataType.STRING)
+    @Column({ type: DataType.STRING, allowNull: false })
     flowNombre!: string;
 
-    @Column(DataType.STRING)
+    @Column({ type: DataType.STRING, allowNull: false })
     templateNombre!: string;
 
+    // Llave foránea apuntando a CursosCCD
+    @ForeignKey(() => CursoCCDModel)
+    @Column({ type: DataType.INTEGER, allowNull: false })
+    cursoCCDId!: number;
+
+    // Relación con CursosCCD
+    @BelongsTo(() => CursoCCDModel)
+    cursoCCD!: CursoCCDModel;
 }

@@ -9,7 +9,7 @@ export const botCursoSchema = z.object({
   botsNombre: z.array(
     z.string().nonempty("botNombre no puede estar vacío")
   ).min(1, "Debe incluir al menos un botNombre")
-}).refine((data: { botsId: string | any[]; botsNombre: string | any[]; }) => data.botsId.length === data.botsNombre.length, {
+}).refine(data => data.botsId.length === data.botsNombre.length, {
   message: "La cantidad de botsId y botsNombre debe coincidir"
 });
 
@@ -23,7 +23,7 @@ export const botCursoUpdateSchema = z.object({
   botsNombre: z.array(
     z.string().nonempty("botNombre no puede estar vacío")
   ).min(1, "Debe incluir al menos un botNombre").optional()
-}).refine((data: { botsId: string | any[]; botsNombre: string | any[]; }) => {
+}).refine(data => {
   // Solo validar la longitud si ambos arrays están presentes
   if (data.botsId && data.botsNombre) {
     return data.botsId.length === data.botsNombre.length;

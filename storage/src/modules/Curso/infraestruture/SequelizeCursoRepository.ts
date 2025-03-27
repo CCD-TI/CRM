@@ -1,3 +1,4 @@
+import { CursoCCDModel } from "../../Course/infraestructure/Course.model";
 import Curso from "../domain/Curso";
 import { CursoRepository } from "../domain/CursoRepository";
 import { CursoModel } from "./Curso.model";
@@ -31,5 +32,8 @@ export class SequelizeCursoRepository implements CursoRepository {
         await CursoModel.destroy({ where: { id } });
     }
 
+    async findCursoCCDById(cursoCCDId: number) {
+        return await CursoCCDModel.findByPk(cursoCCDId); // 👈 Busca por ID en CursosCCD
+    }
 
 }
