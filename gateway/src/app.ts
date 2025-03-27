@@ -34,6 +34,7 @@ class App {
     const gestorServiceUrl = process.env.GESTOR_SERVICE_URL ?? "http://host.docker.internal:8002";
     const leadsServiceUrl = process.env.LEADS_SERVICE_URL ?? "http://host.docker.internal:8003";
     const storageServiceUrl = process.env.STORAGE_SERVICE_URL ?? "http://host.docker.internal:8004";
+    const usuariosServiceUrl = process.env.USUARIOS_SERVICE_URL ?? "http://host.docker.internal:8005";
     this.server.use(
       "/api/masivo",
       createProxyMiddleware({
@@ -72,6 +73,16 @@ class App {
         changeOrigin: true,
         pathRewrite: {
           "^/api/storage": "",
+        },
+      })
+    );
+    this.server.use(
+      "/api/usuarios",
+      createProxyMiddleware({
+        target: usuariosServiceUrl,
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api/usuarios": "",
         },
       })
     );

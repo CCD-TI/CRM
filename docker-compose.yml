@@ -39,7 +39,7 @@ services:
       - bot-network
     volumes:
       - mysql_data:/var/lib/mysql
-      #- ./init-scripts:/docker-entrypoint-initdb.d
+      - ./init-scripts:/docker-entrypoint-initdb.d
   
   gateway:
     build:
@@ -106,6 +106,19 @@ services:
       - "8004:8004"
     env_file:
       - ./storage/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bot-network
+    command: ["npm", "run", "start"]
+  usuarios: 
+    build:
+      context: ./usuarios
+    ports:
+      - "8005:8005"
+    env_file:
+      - ./usuarios/.env
     depends_on:
       mysql:
         condition: service_healthy
