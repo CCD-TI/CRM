@@ -1,10 +1,10 @@
 // src/modules/leads/application/LeadService.ts
 import LeadRepository from "../domain/LeadRepository";
 import Lead from "../domain/Lead";
-import SequelizeLeadRepository from "@Leads/infraestructure/SequelizeLeadRepository";
-
 export default class LeadService {
-  constructor(private leadRepository: LeadRepository) {}
+  constructor(private leadRepository: LeadRepository) {
+    this.leadRepository = leadRepository;
+  }
 
     async create(leadPayload: Lead): Promise<void> {
         try{

@@ -3,7 +3,7 @@ export const waitForBot = async (port:number, retries:number = 10, delay:number 
         await new Promise((resolve) => setTimeout(resolve, delay));
       try {
         // Intentar conectarse al bot
-        const response = await fetch(`http://localhost:${port}/v1/codigo`);
+        const response = await fetch(`http://host.docker.internal:${port}/v1/codigo`);
         const respuesta = await response.json()
         if (response.ok) {
           return respuesta; // Si la respuesta es exitosa, retornamos el JSON

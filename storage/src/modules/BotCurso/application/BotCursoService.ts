@@ -19,8 +19,8 @@ export class BotCursoService{
         return await this.botCursoRepository.findAll();
     }
 
-    async findBotCursoById(id: number) {
-        return await this.botCursoRepository.findById(id);
+    async findAllByCursoId(id: number) {
+        return await this.botCursoRepository.findByCursoId(id);
     }
 
 } 

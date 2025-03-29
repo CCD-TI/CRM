@@ -6,10 +6,10 @@ class DatabaseManager {
 
   private constructor() {
     this.sequelize = new Sequelize({
-      host: process.env.DB_HOST_DOCKER || "localhost", // Conectar al contenedor
+      host: process.env.DB_HOST_MYSQL_DOCKER || "host.docker.internal", // Conectar al contenedor
       port: parseInt(process.env.DB_PORT_DOCKER || "3307"),
       username: process.env.DB_USER_DOCKER || "root",
-      password: process.env.DB_PASSWORD_DOCKER || "botsito",
+      password: process.env.DB_PASSWORD_DOCKER || "root",
       dialect: "mysql",
       logging: false, // Evita logs innecesarios
     });

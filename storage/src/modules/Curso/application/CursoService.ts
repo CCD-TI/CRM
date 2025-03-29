@@ -19,5 +19,7 @@ export class CursoService{
         return await this.cursoRepository.findById(id);
     }
 
-    
+    async findCursoByIdIncludeBot(id: number){
+        return await this.cursoRepository.findById(id);
+    }
 }

@@ -1,3 +1,4 @@
+import { BotCursoModel } from "../../BotCurso/infraestruture/BotCurso.model";
 import Curso from "../domain/Curso";
 import { CursoRepository } from "../domain/CursoRepository";
 import { CursoModel } from "./Curso.model";
@@ -16,8 +17,9 @@ export class SequelizeCursoRepository implements CursoRepository {
         return cursos.map((curso) => curso.get({ plain: true }) as Curso);
     }
     async findById(cursoId: number): Promise<Curso> {
-        const curso = await CursoModel.findOne({ where: { id: cursoId } });
+        const curso = await CursoModel.findByPk(cursoId);
         if (!curso) throw new Error('Curso not found');
+        console.log(curso);
         return curso.get({ plain: true }) as Curso;
     }
     async update(id:number, curso: Curso): Promise<Curso> {

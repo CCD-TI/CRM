@@ -7,6 +7,6 @@ export default class Formulario {
         public name: string,
         public RedFormularioId: string,
         public cursoId: number,
-        public campanaId: number
+        public campanaId?: number
     ) {}
 }

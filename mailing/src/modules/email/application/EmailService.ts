@@ -4,7 +4,7 @@ import { LeadRepository } from '../domain/LeadRepository';
 import { NodemailerAdapter } from '../infraestructure/NodemailerAdapter';
 import { readFile } from 'fs/promises';
 import path from 'path';
-import { EmailSchema } from '../domain/EmailSchema';
+//import { EmailSchema } from '../domain/EmailSchema';
 
 type SendEmailPayload = {
   email: string;
@@ -24,8 +24,8 @@ export class EmailService {
     private templatesPath: string
   ) {}
 
-  async sendEmail(payload: SendEmailPayload): Promise<{ success: boolean; message: string }> {
-    EmailSchema.parse(payload);
+  async sendEmail(payload: SendEmailPayload): Promise<any> {
+    //EmailSchema.parse(payload);
 
     const account = await this.accountRepository.getRandomAccount();
     if (!account || account.id === undefined) {
@@ -47,7 +47,7 @@ export class EmailService {
       return { success: false, message: 'La cuenta se encuentra bloqueada por exceso de envíos' };
     }
 
-    console.log('Cuenta de envío seleccionada:', account.email);
+    console.log('Cuenta de envío seleccionada:', account);
 
     const templateFile = `${payload.Template}.html`;
     const templatePath = path.join(this.templatesPath, templateFile);
@@ -72,13 +72,13 @@ export class EmailService {
         accountId: account.id
       });
       return { success: true, message: 'Correo enviado correctamente' };
-    } catch (err) {
+    } catch (err: any) {
       await this.leadRepository.create({
         email: payload.email,
         status: 'failed',
         accountId: account.id
       });
-      return { success: false, message: 'Error al enviar el correo' };
+      return { success: false, message: 'Error al enviar el correo', error: err.message };
     }
   }
 }

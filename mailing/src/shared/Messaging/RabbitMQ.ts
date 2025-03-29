@@ -3,10 +3,10 @@ import amqp, { Connection, Channel } from "amqplib";
 
 const rabbitSettings = {
   protocol: "amqp",
-  hostname: "rabbitmq",
+  hostname: process.env.HOST_RABBITMQ,
   port: 5672,
-  username: "guest",
-  password: "guest",
+  username: process.env.USER_RABBITMQ,
+  password: process.env.PASSWORD_RABBITMQ,
   vhost: "/",
   authMechanism: ["PLAIN", "AMQPLAIN", "EXTERNAL"],
 };

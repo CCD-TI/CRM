@@ -78,7 +78,7 @@ export class BotCursoController {
     static async findBotCursoById(req: Request , res: Response) {
         try {
             const id = parseInt(req.params.id);
-            const botCurso = await botCursoService.findBotCursoById(id);
+            const botCurso = await botCursoService.findAllByCursoId(id);
             res.status(200).json(botCurso);
         } catch (error) {
             res.status(500).json({ error: error });

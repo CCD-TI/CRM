@@ -37,4 +37,8 @@ export class SequelizeBotCursoRepository implements BotCursoRepository{
         await BotCursoModel.destroy({ where: { id } });
     }
 
+    async findByCursoId(cursoId: number): Promise<BotCurso[]> {
+        const botCursos = await BotCursoModel.findAll({ where: { cursoId } });
+        return botCursos.map((botCurso) => botCurso.get({ plain: true }) as BotCurso);
+    }
 }

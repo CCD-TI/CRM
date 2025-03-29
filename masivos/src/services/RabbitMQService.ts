@@ -2,15 +2,15 @@ import amqp, { Connection, Channel } from "amqplib";
 
 const rabbitSettings = {
   protocol: "amqp",
-  hostname: "rabbitmq",
+  hostname: process.env.HOST_RABBITMQ,
   port: 5672,
-  username: "guest",
-  password: "guest",
+  username: process.env.USER_RABBITMQ,
+  password: process.env.PASSWORD_RABBITMQ,
   vhost: "/",
   authMechanism: ["PLAIN", "AMQPLAIN", "EXTERNAL"],
 };
 
-const queues = ["leads", "bases"]; // Lista de colas a declarar
+const queues = ["leads", "bases", "emailQueue"]; // Lista de colas a declarar
 
 class RabbitMQService {
   private static instance: RabbitMQService;
@@ -34,9 +34,13 @@ class RabbitMQService {
       this.connection = await amqp.connect(rabbitSettings);
       this.channel = await this.connection.createChannel();
 
-      const exchange = "asesores"; // Nombre del exchange
-      await this.channel.assertExchange(exchange, "direct", { durable: true });
-
+      await this.channel.assertExchange("asesores", "direct", { durable: true });
+      await this.channel.assertExchange("botcrm", "direct", { durable: true });
+      console.log("=================================================")
+      console.log("=================================================")
+      console.log("✅ Exchanges declarados correctamente.");
+      console.log("=================================================")
+      console.log("=================================================")
       // Asegurarse de que las colas estén declaradas
       for (const queue of queues) {
         await this.channel.assertQueue(queue);

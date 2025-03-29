@@ -10,13 +10,15 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
-
+    environment:
+      RABBITMQ_DEFAULT_USER: ${USER_RABBITMQ}   # Usuario definido
+      RABBITMQ_DEFAULT_PASS: ${PASSWORD_RABBITMQ}  # Contraseña definida
   redis:
     image: redis:latest
     container_name: redis
     restart: always
     networks:
-      - bot-network
+      - ${NETWORK}
     ports:
       - "6379:6379"
 
@@ -35,20 +37,27 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - bot-network
+      - ${NETWORK}
     volumes:
       - mysql_data:/var/lib/mysql
       - ./init-scripts:/docker-entrypoint-initdb.d
 
   gateway:
+    container_name: gateway
     build:
       context: ./gateway
     ports:
       - "8000:8000"
-    env_file:
-      - ./gateway/.env
+    environment:
+      - PORT=8000
+      - MASIVOS_SERVICE_URL=${MASIVOS_SERVICE_URL}
+      - GESTOR_SERVICE_URL=${GESTOR_SERVICE_URL}
+      - LEADS_SERVICE_URL=${LEADS_SERVICE_URL}
+      - STORAGE_SERVICE_URL=${STORAGE_SERVICE_URL}
+      - USUARIOS_SERVICE_URL=${USUARIOS_SERVICE_URL}
+      - MAILING_SERVICE_URL=${MAILING_SERVICE_URL}
     networks:
-      - bot-network
+      - ${NETWORK}
     command: ["npm", "run", "dev"]
     develop:
       watch:
@@ -59,12 +68,33 @@ services:
             - node_modules/
 
   masivos:
+    container_name: masivos
     build:
       context: ./masivos
     ports:
       - "8001:8001"
-    env_file:
-      - ./masivos/.env
+    environment:
+      - PORT=8001
+      - DB_NAME=${DB_NAME_MASIVOS}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_DIALECT=${DB_DIALECT}
+      - DB_PORT=${DB_PORT}
+      - ALTER=${ALTER}
+      - DB_HOST_DOCKER=${DB_HOST_DOCKER}
+      - DOCKER_HOST_DEMON=${DOCKER_HOST_DEMON}
+      - TIMEOUT_WEBSOCKET=${TIMEOUT_WEBSOCKET}
+      - GOOGLE_SERVICE_ACCOUNT_EMAIL=${GOOGLE_SERVICE_ACCOUNT_EMAIL}
+      - GOOGLE_PRIVATE_KEY=${GOOGLE_PRIVATE_KEY}
+      - SECRET_KEY=${SECRET_KEY}
+      - ACCESS_KEY=${ACCESS_KEY}
+      - SECRET_KEY_R2=${SECRET_KEY_R2}
+      - ENDPOINT_URL=${ENDPOINT_URL}
+      - BUCKET_NAME=${BUCKET_NAME}
+      - HOST_RABBITMQ=${HOST_RABBITMQ}
+      - USER_RABBITMQ=${USER_RABBITMQ}
+      - PASSWORD_RABBITMQ=${PASSWORD_RABBITMQ}
     depends_on:
       rabbitmq:
         condition: service_started
@@ -75,7 +105,7 @@ services:
     volumes:
       - //./pipe/docker_engine:/var/run/docker.sock
     networks:
-      - bot-network
+      - ${NETWORK}
     command: ["npm", "run", "dev"]
     develop:
       watch:
@@ -86,17 +116,30 @@ services:
             - node_modules/
 
   gestor-archivos:
+    container_name: gestor
     build:
       context: ./gestor-archivos
     ports:
       - "8002:8002"
-    env_file:
-      - ./gestor-archivos/.env
+    environment:
+      - PORT=8002
+      - DB_NAME=${DB_NAME_GESTOR}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_DIALECT=${DB_DIALECT}
+      - DB_PORT=${DB_PORT}
+      - ALTER=${ALTER}
+      - SECRET_KEY=${SECRET_KEY}
+      - ACCESS_KEY=${ACCESS_KEY}
+      - SECRET_KEY_R2=${SECRET_KEY_R2}
+      - ENDPOINT_URL=${ENDPOINT_URL}
+      - BUCKET_NAME=${BUCKET_NAME}
     depends_on:
       mysql:
         condition: service_healthy
     networks:
-      - bot-network
+      - ${NETWORK}
     command: ["npm", "run", "dev"]
     develop:
       watch:
@@ -107,17 +150,29 @@ services:
             - node_modules/
 
   leads:
+    container_name: leads
     build:
       context: ./leads
     ports:
       - "8003:8003"
-    env_file:
-      - ./leads/.env
+    environment:
+      - PORT=8003
+      - LOAD_DATA=false
+      - DB_NAME=${DB_NAME_LEADS}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_DIALECT=${DB_DIALECT}
+      - DB_PORT=${DB_PORT}
+      - ALTER=${ALTER}
+      - HOST_RABBITMQ=${HOST_RABBITMQ}
+      - USER_RABBITMQ=${USER_RABBITMQ}
+      - PASSWORD_RABBITMQ=${PASSWORD_RABBITMQ}
     depends_on:
       mysql:
         condition: service_healthy
     networks:
-      - bot-network
+      - ${NETWORK}
     command: ["npm", "run", "dev"]
     develop:
       watch:
@@ -128,17 +183,25 @@ services:
             - node_modules/
 
   storage:
+    container_name: storage
     build:
       context: ./storage
     ports:
       - "8004:8004"
-    env_file:
-      - ./storage/.env
+    environment:
+      - PORT=8004
+      - DB_NAME=${DB_NAME_STORAGE}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_DIALECT=${DB_DIALECT}
+      - DB_PORT=${DB_PORT}
+      - ALTER=${ALTER}
     depends_on:
       mysql:
         condition: service_healthy
     networks:
-      - bot-network
+      - ${NETWORK}
     command: ["npm", "run", "dev"]
     develop:
       watch:
@@ -149,17 +212,26 @@ services:
             - node_modules/
 
   usuarios:
+    container_name: usuarios
     build:
       context: ./usuarios
     ports:
       - "8005:8005"
-    env_file:
-      - ./usuarios/.env
+    environment:
+      - PORT=8005
+      - DB_NAME=${DB_NAME_USUARIOS}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_DIALECT=${DB_DIALECT}
+      - DB_PORT=${DB_PORT}
+      - ALTER=${ALTER}
+      - SECRET_KEY=${SECRET_KEY}
     depends_on:
       mysql:
         condition: service_healthy
     networks:
-      - bot-network
+      - ${NETWORK}
     command: ["npm", "run", "dev"]
     develop:
       watch:
@@ -170,17 +242,28 @@ services:
             - node_modules/
 
   mailing:
+    container_name: mailing
     build:
       context: ./mailing
     ports:
       - "8006:8006"
-    env_file:
-      - ./mailing/.env
+    environment:
+      - PORT=8006
+      - DB_NAME=${DB_NAME_MAILING}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_DIALECT=${DB_DIALECT}
+      - DB_PORT=${DB_PORT}
+      - ALTER=${ALTER}
+      - HOST_RABBITMQ=${HOST_RABBITMQ}
+      - USER_RABBITMQ=${USER_RABBITMQ}
+      - PASSWORD_RABBITMQ=${PASSWORD_RABBITMQ}
     depends_on:
       mysql:
         condition: service_healthy
     networks:
-      - bot-network
+      - ${NETWORK}
     command: ["npm", "run", "dev"]
     develop:
       watch:

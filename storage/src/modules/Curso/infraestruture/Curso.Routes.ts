@@ -13,4 +13,5 @@ cursoRoutes.get('/data', (_req:any, res:any) => {
 })
 cursoRoutes.get('/:id', CursoController.findCursoById);
 
+cursoRoutes.get("/info-crm/:id", CursoController.info);
 export default cursoRoutes;

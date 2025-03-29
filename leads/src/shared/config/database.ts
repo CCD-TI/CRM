@@ -39,7 +39,7 @@ class Database {
             await this.connection?.authenticate();
             console.log("✅ Conexión a MySQL establecida correctamente.");
             
-            const alter = process.env.ALTER === 'true';
+            const alter = process.env.ALTER === 'false';
             await this.connection?.sync({ alter });  // 🔹 Usamos "alter" en lugar de "force" force:true
              
 

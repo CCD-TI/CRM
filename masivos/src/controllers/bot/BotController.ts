@@ -20,18 +20,18 @@ class BotController {
       await DatabaseManager.createDatabase(db_name);
 
       const docker = DockerService.getInstance().getDocker();
-
+      console.log("SOCKET_PATH_DOCKER:", process.env.SOCKET_PATH_DOCKER);
       // Crear y correr un contenedor
       const container = await docker.createContainer({
         Image: imagebot, // Imagen del bot
         name: `bot-${imagebot}-${phone}`, // Nombre único del contenedor
         Env: [
           `PHONE=51${phone}`,
-          `DB_HOST=mysql-bots`,
+          `DB_HOST=host.docker.internal`,
           `DB_USER=root`,
           `DB_NAME=${db_name}`, // Nueva DB específica del bot
-          `DB_PASSWORD=botsito`,
-          `DB_PORT=3306`
+          `DB_PASSWORD=root`,
+          `DB_PORT=3307`
           ],
         ExposedPorts: {
           "3000/tcp": {}, // Puerto expuesto dentro del contenedor
@@ -385,6 +385,16 @@ class BotController {
       console.error('Error al eliminar la caché y detener el contenedor:', error);
       res.status(500).json({ error: "Ocurrió un error al eliminar la caché o detener el contenedor." });
     }
+  }
+
+  getBotsByIds = async (req: any, res: any) => {
+    const { ids } = req.body;
+    const bots = await Bot.findAll({
+      where: {
+        id: ids
+      }
+    });
+    return res.status(200).json({bots: bots});
   }
 }
 

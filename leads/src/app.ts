@@ -19,6 +19,12 @@ class App {
     private middlewares(): void {
         this.server.use(cors());
         this.server.use(express.json());
+        this.server.use((req:any, res: any, next: any) => {
+            console.log(`Ruta: ${req.method} ${req.path}`);
+            console.log('Body:', req.body);
+            next();
+        });
+        
     }
 
     private routes(): void {
