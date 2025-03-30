@@ -33,8 +33,8 @@ export class SequelizeBotCursoRepository implements BotCursoRepository{
         return botCurso;
     }
 
-    async delete(id: number): Promise<void> {
-        await BotCursoModel.destroy({ where: { id } });
+    async delete(cursoId: number): Promise<void> {
+        await BotCursoModel.destroy({ where: { cursoId } });
     }
 
 }

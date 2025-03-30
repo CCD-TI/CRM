@@ -60,8 +60,8 @@ export class BotCursoController {
     }
     static async deleteBotCurso(req: Request , res: Response) {
         try {
-            const botCurso = req.body;
-            await botCursoService.deleteBotCurso(botCurso);
+            const cursoId = parseInt(req.params.cursoId);
+            await botCursoService.deleteBotCurso(cursoId);
             res.status(200).json({ message: 'BotCurso deleted' });
         } catch (error) {
             res.status(500).json({ error: error });

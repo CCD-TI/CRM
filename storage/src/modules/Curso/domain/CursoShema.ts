@@ -5,7 +5,7 @@ export const cursoSchema = z.object({
     nombre: z.string().min(3, "El nombre debe tener al menos 3 caracteres"),
     nomenclatura: z.string().min(3, "El nombre debe tener al menos 3 caracteres"),
     status: z.number().default(0),
-    flowId: z.number().positive("flowId debe ser un número positivo"),
+    flowId: z.number().optional(),
     flowNombre: z.string().nonempty("flowNombre no puede estar vacío"),
     templateNombre: z.string().nonempty("templateNombre no puede estar vacío"),
 });

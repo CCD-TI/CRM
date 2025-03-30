@@ -3,7 +3,7 @@ import { BotCursoRepository } from "../domain/BotCursoRepository";
 export class BotCursoService{
     constructor(private botCursoRepository: BotCursoRepository) {}
 
-    async createBotCurso(botCurso: any) {
+    async createBotCurso(botCurso: any) { 
         return await this.botCursoRepository.create(botCurso);
     }
 
@@ -11,8 +11,8 @@ export class BotCursoService{
         return await this.botCursoRepository.update(id, botCurso);
     }
 
-    async deleteBotCurso(botCurso: any) {
-        return await this.botCursoRepository.delete(botCurso);
+    async deleteBotCurso(cursoId: any) {
+        return await this.botCursoRepository.delete(cursoId);
     }
 
     async findAllBotCursos() {
