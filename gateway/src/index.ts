@@ -3,7 +3,7 @@ config();
 import app from "./app";
 async function main() {
   try {
-    const puerto = process.env.PUERTO ?? 8000;
+    const puerto = process.env.PORT ?? 8000;
     app.listen(puerto, () => {
       console.log(`Servidor corriendo en el puerto ${puerto}`);
     });

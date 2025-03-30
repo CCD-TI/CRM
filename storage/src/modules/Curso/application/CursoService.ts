@@ -18,6 +18,7 @@ export class CursoService{
     async findCursoById(id: number) {
         return await this.cursoRepository.findById(id);
     }
+<<<<<<< HEAD
     async searchCursos(term: string): Promise<Curso[]> {
         if (!term.trim()) return this.findAllCursos();
     
@@ -29,4 +30,10 @@ export class CursoService{
         return this.cursoRepository.searchPartial(term);
     }
     
+=======
+
+    async findCursoByIdIncludeBot(id: number){
+        return await this.cursoRepository.findById(id);
+    }
+>>>>>>> 1bba0497f4b4797a924077980aa7fcd4187b2f4c
 }

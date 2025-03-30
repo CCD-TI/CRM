@@ -11,7 +11,7 @@ export default class SequelizeLeadRepository implements LeadRepository {
             // Aquí se utiliza falseormularioId según lo solicitado.
             await LeadModel.create({
                 formularioId: lead.formularioId,
-                userId: lead.userId,
+                userId: lead.clienteId,
                 origen: lead.origen
             });
             console.log("Lead creado exitosamente en la base de datos");
@@ -26,7 +26,7 @@ export default class SequelizeLeadRepository implements LeadRepository {
             return new Lead(
                 lead.id,
                 lead.formularioId, 
-                lead.userId, 
+                lead.clienteId, 
                 lead.origen
             );
         });

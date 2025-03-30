@@ -19,13 +19,7 @@ class App {
       this.routes();
     }
     private middlewares(): void {
-      this.server.use((req, _res, next) => {
-        console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
-        console.log('Headers:', req.headers);
-        console.log('Body:', req);
-        
-        next();
-      });
+     
       this.server.use(
         cors({
           origin: "*",

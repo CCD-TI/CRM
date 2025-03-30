@@ -36,6 +36,12 @@ class App {
     const storageServiceUrl = process.env.STORAGE_SERVICE_URL ?? "http://host.docker.internal:8004";
     const usuariosServiceUrl = process.env.USUARIOS_SERVICE_URL ?? "http://host.docker.internal:8005";
     const mailingServiceUrl = process.env.MAILING_SERVICE_URL ?? "http://host.docker.internal:8005";
+    console.log("masivoServiceUrl", masivoServiceUrl);
+    console.log("gestorServiceUrl", gestorServiceUrl);
+    console.log("leadsServiceUrl", leadsServiceUrl);
+    console.log("storageServiceUrl", storageServiceUrl);
+    console.log("usuariosServiceUrl", usuariosServiceUrl);
+    console.log("mailingServiceUrl", mailingServiceUrl);
     this.server.use(
       "/api/masivo",
       createProxyMiddleware({

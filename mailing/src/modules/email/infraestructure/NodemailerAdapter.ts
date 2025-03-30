@@ -18,7 +18,7 @@ export class NodemailerAdapter {
   
   async sendMail(to: string, subject: string, html: string) {
     const info = await this.transporter.sendMail({
-      from: `"No Reply" <${this.accountEmail}>`,
+      from: `"¡Bienvenido a CCD Capacitaciones!" <${this.accountEmail}>`,
       to,
       subject,
       html,

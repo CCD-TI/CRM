@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 import { Op } from "sequelize";
+=======
+>>>>>>> 1bba0497f4b4797a924077980aa7fcd4187b2f4c
 import { BotCursoModel } from "../../BotCurso/infraestruture/BotCurso.model";
 import Curso from "../domain/Curso";
 import { CursoRepository } from "../domain/CursoRepository";
@@ -20,11 +23,16 @@ export class SequelizeCursoRepository implements CursoRepository {
 
 
     async findById(cursoId: number): Promise<Curso> {
+<<<<<<< HEAD
         const curso = await CursoModel.findOne({ 
             where: { id: cursoId },
              
         });
+=======
+        const curso = await CursoModel.findByPk(cursoId);
+>>>>>>> 1bba0497f4b4797a924077980aa7fcd4187b2f4c
         if (!curso) throw new Error('Curso not found');
+        console.log(curso);
         return curso.get({ plain: true }) as Curso;
     }
 

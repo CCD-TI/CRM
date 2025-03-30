@@ -7,7 +7,7 @@ export const s3 = new S3Client({
     region: "auto",
     credentials: {
         accessKeyId: process.env.ACCESS_KEY!,
-        secretAccessKey: process.env.SECRET_KEY!,
+        secretAccessKey: process.env.SECRET_KEY_R2!,
     },
     forcePathStyle: true,
 });

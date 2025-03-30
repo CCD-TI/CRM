@@ -57,17 +57,17 @@ export default class SequelizeFormularioRepository implements FormularioReposito
         }
     }
 
-    async findByIdForm(redid: number): Promise<typeof FormularioSchema._output> {
+    async findByIdForm(redid: number): Promise<Formulario> {
       try {
         const formularioModel = await FormularioModel.findOne({ where: { RedFormularioID: redid } });
         if (!formularioModel) {
           throw new Error(`Formulario con RedFormularioID ${redid} no encontrado`);
         }
-        
         // Valida y transforma el objeto para que cumpla con el schema y el tipo Formulario
-        const formularioValidado = FormularioSchema.parse(formularioModel);
-        
-        return formularioValidado;
+        //const formularioValidado = FormularioSchema.parse(formularioModel);
+        const formulario = new Formulario(formularioModel.id, formularioModel.name, formularioModel.RedFormularioId, formularioModel.cursoId, formularioModel.campanaId);
+        console.log(formulario);
+        return formulario; 
       } catch (error) {
         console.error("Error en findByIdForm:", error);
         throw error;

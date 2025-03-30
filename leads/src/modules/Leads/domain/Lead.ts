@@ -4,7 +4,7 @@ export default class Lead {
     constructor(
         public id: number | null,
         public formularioId: number,
-        public userId: number,
+        public clienteId: number | null,
         public origen: string,
         public Formulario?: Formulario,
     ){        

@@ -34,6 +34,7 @@ async function main(): Promise<void> {
       2076719352
     );
 */
+
     new Worker(
       "taskQueue",
       async (job: any) => {
@@ -42,6 +43,7 @@ async function main(): Promise<void> {
       },
       { connection }
     );
+    
     //escucha del servidor en puerto 8001
     const port = Number(process.env.PORT || 8001);
     
