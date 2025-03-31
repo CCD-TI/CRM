@@ -6,7 +6,7 @@ services:
     container_name: rabbitmq
     restart: always
     networks:
-      - bot-network
+      - ${NETWORK}
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -24,9 +24,9 @@ services:
 
   mysql:
     image: mysql:8
-    container_name: mysql
+    container_name: ${DB_HOST_MYSQL_DOCKER}
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_MYSQL_DOCKER}
       MYSQL_USER: paul
       MYSQL_PASSWORD: paulp
     ports:
@@ -83,6 +83,8 @@ services:
       - DB_PORT=${DB_PORT}
       - ALTER=${ALTER}
       - DB_HOST_DOCKER=${DB_HOST_DOCKER}
+      - DB_USER_MYSQL_DOCKER=${DB_USER_MYSQL_DOCKER}
+      - DB_PASSWORD_MYSQL_DOCKER=${DB_PASSWORD_MYSQL_DOCKER}
       - DOCKER_HOST_DEMON=${DOCKER_HOST_DEMON}
       - TIMEOUT_WEBSOCKET=${TIMEOUT_WEBSOCKET}
       - GOOGLE_SERVICE_ACCOUNT_EMAIL=${GOOGLE_SERVICE_ACCOUNT_EMAIL}
@@ -278,4 +280,4 @@ volumes:
 
 networks:
   bot-network:
-    driver: bridge
+    external: true
