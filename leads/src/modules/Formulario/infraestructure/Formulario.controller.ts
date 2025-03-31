@@ -11,10 +11,11 @@ export default class FormularioController {
     static async create(req: Request, res: Response): Promise<void> {
         try {
             const validatedData = FormularioSchema.parse(req.body);
+            console.log("validacion:", validatedData)
             await formularioService.create(validatedData);
             res.status(201).json({ message: "Formulario creado exitosamente" });
-        } catch (error) {
-            res.status(500).json({ error: "Error al crear el formulario" });
+        } catch (error: any) {
+            res.status(500).json({ error: "Error al crear el formulario" , mensaje: error.message});
         }
     }
     static async update(req: Request, res: Response): Promise<void> {

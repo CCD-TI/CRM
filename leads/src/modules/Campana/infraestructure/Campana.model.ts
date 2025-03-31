@@ -7,8 +7,8 @@ export class CampanaModel extends Model {
     @Column(DataType.STRING)
     name!: string;
 
-    @Column(DataType.INTEGER)
-    RedCampanaId!: number;
+    @Column(DataType.STRING)
+    RedCampanaId!: string;
 
     @Column({
         type: DataType.INTEGER,

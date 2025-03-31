@@ -13,6 +13,12 @@ export class FormularioModel extends Model {
   @Column(DataType.INTEGER)
   cursoId!: number;
 
+   @Column({
+        type: DataType.INTEGER,
+        defaultValue: 1 // Valor por defecto cuando no se envía en la inserción
+    })  
+    status!: number;
+
   @ForeignKey(() => CampanaModel)
   @Column(DataType.INTEGER)
   campanaId!: number;

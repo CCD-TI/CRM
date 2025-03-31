@@ -10,9 +10,12 @@ export default class FormularioService {
     }
     async create(formulario: Formulario): Promise<void>{
         try {
+            console.log(formulario);
+
             await this.formularioRepository.create(formulario);
             return Promise.resolve();
-        } catch (error) {
+        } catch (error: any) {
+            console.log(error);
             return Promise.reject(error);
         }
     }

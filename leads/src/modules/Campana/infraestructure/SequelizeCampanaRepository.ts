@@ -34,7 +34,7 @@ export default class SequelizeCampanaRepository implements CampanaRepository {
             throw new Error("Campana no encontrada");
         }
 
-        return new Campana(campana.name, campana.RedCampanaId, campana.paginaId, campana.id);
+        return new Campana(campana.name, campana.RedCampanaId, campana.paginaId, campana.status, campana.id);
     }
     async findAll(): Promise<Campana[]> {
         const campanas = await CampanaModel.findAll();
