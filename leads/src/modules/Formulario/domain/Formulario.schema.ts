@@ -6,5 +6,6 @@ name: z.string().min(2).max(500),
 RedFormularioId: z.string(),
 cursoId: z.number().int().positive(),
 status: z.number().int().default(1),
-campanaId: z.number().int().positive().optional()
+campanaId: z.number().int().positive().optional(),
+botId: z.number().int().positive().optional(),
 });

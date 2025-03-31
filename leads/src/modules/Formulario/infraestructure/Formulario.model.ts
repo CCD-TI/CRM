@@ -22,7 +22,11 @@ export class FormularioModel extends Model {
   @ForeignKey(() => CampanaModel)
   @Column(DataType.INTEGER)
   campanaId!: number;
-
+  
   @BelongsTo(() => CampanaModel)
   campana!: CampanaModel;
+
+  @Column(DataType.INTEGER)
+  botId!: number;
+
 }

@@ -8,6 +8,7 @@ export default class Formulario {
         public cursoId: number,
         public status: number,
         public id?: number,
-        public campanaId?: number
+        public campanaId?: number,
+        public botId?: number,
     ) {}
 }
