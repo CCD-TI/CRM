@@ -36,7 +36,7 @@ export default class PaginaController {
             res.status(500).json({ error: error });
         }
     }
-    static async findAll(req: Request, res: Response): Promise<void> {
+    static async findAll(_req: Request, res: Response): Promise<void> {
         try {
             const paginas = await paginaService.findAll();
             res.status(200).json(paginas);
