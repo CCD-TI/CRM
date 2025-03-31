@@ -24,6 +24,7 @@ services:
   mysql:
     image: mysql:8
     container_name: mysql
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_MYSQL_DOCKER}
       MYSQL_USER: paul
@@ -43,6 +44,7 @@ services:
       - ./init-scripts:/docker-entrypoint-initdb.d
   gateway:
     container_name: gateway
+    restart: always
     build:
       context: ./gateway
     ports:
@@ -61,6 +63,7 @@ services:
   
   masivos:
     container_name: masivos
+    restart: always
     build:
       context: ./masivos
     ports:
@@ -105,6 +108,7 @@ services:
 
   gestor-archivos:
     container_name: gestor
+    restart: always
     build:
       context: ./gestor-archivos
     ports:
@@ -132,6 +136,7 @@ services:
 
   leads: 
     container_name: leads
+    restart: always
     build:
       context: ./leads
     ports:
@@ -158,6 +163,7 @@ services:
   
   storage: 
     container_name: storage
+    restart: always
     build:
       context: ./storage
     ports:
@@ -180,6 +186,7 @@ services:
   
   usuarios: 
     container_name: usuarios
+    restart: always
     build:
       context: ./usuarios
     ports:
@@ -202,6 +209,7 @@ services:
     command: ["npm", "run", "start"]
   mailing: 
     container_name: mailing
+    restart: always
     build:
       context: ./mailing
     ports:
@@ -226,6 +234,7 @@ services:
     command: ["npm", "run", "start"]
   telebot:
     container_name: telebot
+    restart: always
     build: 
       context: ./telebot
     ports:
