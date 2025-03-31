@@ -5,5 +5,8 @@ id: z.number().int().positive(),
 name: z.string().min(2).max(500),
 RedFormularioId: z.string(),
 cursoId: z.number().int().positive(),
-campanaId: z.number().int().positive().optional()
+campanaId: z.number().int().positive().optional(),
+botId: z.number().int().positive().optional(),
 });
+
+export const FormularioUpdateSchema = FormularioSchema.partial();
