@@ -1,7 +1,10 @@
 export default class Pagina {
     constructor(
-        public id: number,
         public name: string,
-        public RedPaginaId: number
+        public RedPaginaId: number,
+        public status: number = 1,
+        createdAt?: Date | undefined,
+
+        public id?: number
     ) {}
 }

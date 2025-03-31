@@ -16,14 +16,11 @@ export default class PaginaService {
         }
         
     }
-    async update(pagina: Pagina): Promise<void>{
-        try {
-            await this.paginaRepository.update(pagina);
-            return Promise.resolve();
-        } catch (error) {
-            return Promise.reject(error);
-        }
+    async updateCurso(id:number, pagina: Partial<Pagina>) {
+        return await this.paginaRepository.update(id,pagina);
     }
+    
+
     async delete(id: number): Promise<void>{
         try {
             await this.paginaRepository.delete(id);
@@ -32,6 +29,8 @@ export default class PaginaService {
             return Promise.reject(error);
         }
     }
+
+    
     async findById(id: number): Promise<Pagina>{
         try {
             const pagina = await this.paginaRepository.findById(id);
@@ -47,5 +46,16 @@ export default class PaginaService {
         } catch (error) {
             return Promise.reject(error);
         }
+    }
+
+    async searchCursos(term: string): Promise<Pagina[]> {
+        if (!term.trim()) return this.findAll();
+    
+        // Primero busca coincidencia EXACTA
+        const exactMatch = await this.paginaRepository.searchExact(term);
+        if (exactMatch.length > 0) return exactMatch;
+    
+        // Si no hay exacta, busca coincidencias PARCIALES
+        return this.paginaRepository.searchPartial(term);
     }
 }

@@ -6,7 +6,6 @@ export interface CursoRepository {
   delete(id: number): Promise<void>;
   findAll(): Promise<Curso[]>;
   findById(id: number): Promise<Curso>;
-<<<<<<< HEAD
   
   // Métodos de búsqueda
   searchExact(term: string): Promise<Curso[]>; // Nueva: búsqueda exacta

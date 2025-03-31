@@ -4,9 +4,10 @@ import CampanaController from "./Campana.controller";
 const CampanaRouter = Router();
 
 CampanaRouter.post("", CampanaController.create);
-CampanaRouter.put("", CampanaController.update);
+CampanaRouter.put("/:id", CampanaController.update);
 CampanaRouter.delete("/:id", CampanaController.delete);
+CampanaRouter.get("/:paginaId/search", CampanaController.searchCursos);
 CampanaRouter.get("", CampanaController.findAll);
-CampanaRouter.get("/:id", CampanaController.findById);
+CampanaRouter.get("/:paginaId", CampanaController.findByPaginaId);
 
 export default CampanaRouter;
