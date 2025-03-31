@@ -51,7 +51,35 @@ export class CursoController{
             res.status(400).json({ message: error });
         }
     }
-
+    static async searchCursos(req: Request, res: Response) {
+        try {
+            const searchTerm = req.query.q as string;
+            const cursoService = new CursoService(new SequelizeCursoRepository());
+    
+            // 1. Definir resultados fuera del condicional
+            let resultados;
+            
+            if (!searchTerm || searchTerm.trim() === '') {
+                resultados = await cursoService.findAllCursos();
+            } else {
+                resultados = await cursoService.searchCursos(searchTerm);
+            }
+    
+            // 2. Single Response Principle - Una sola respuesta
+             res.status(200).json(resultados);
+    
+        } catch (error) {
+            console.error('Error en searchCursos:', error);
+            
+            // 3. Verificar que no se haya enviado respuesta previamente
+            if (!res.headersSent) {
+                 res.status(500).json({
+                    message: 'Error al realizar la búsqueda',
+                    error: error instanceof Error ? error.message : 'Unknown error'
+                });
+            }
+        }
+    }
     static async deleteCurso(req: Request, res: Response){
         try {
             const curso = await cursoService.deleteCurso(Number(req.params.id));

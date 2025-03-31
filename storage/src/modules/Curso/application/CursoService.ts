@@ -18,8 +18,15 @@ export class CursoService{
     async findCursoById(id: number) {
         return await this.cursoRepository.findById(id);
     }
-
-    async findCursoByIdIncludeBot(id: number){
-        return await this.cursoRepository.findById(id);
+    async searchCursos(term: string): Promise<Curso[]> {
+        if (!term.trim()) return this.findAllCursos();
+    
+        // Primero busca coincidencia EXACTA
+        const exactMatch = await this.cursoRepository.searchExact(term);
+        if (exactMatch.length > 0) return exactMatch;
+    
+        // Si no hay exacta, busca coincidencias PARCIALES
+        return this.cursoRepository.searchPartial(term);
     }
+    
 }

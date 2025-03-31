@@ -7,4 +7,11 @@ export class PaginaModel extends Model {
 
     @Column(DataType.INTEGER)
     RedPaginaId!: number;    
+
+
+    @Column({
+        type: DataType.INTEGER,
+        defaultValue: 1 // Valor por defecto cuando no se envía en la inserción
+    })  
+    status!: number;  
 }

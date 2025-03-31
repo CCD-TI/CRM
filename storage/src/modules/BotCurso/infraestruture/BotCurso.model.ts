@@ -2,12 +2,11 @@ import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from "sequelize
 import { CursoModel } from "../../Curso/infraestruture/Curso.model";
 
 
-@Table({ tableName: 'BotCurso' }) // Nombre de la tabla en la base de datos
+@Table({ tableName: 'BotCurso' })
 export class BotCursoModel extends Model {
-
     @ForeignKey(() => CursoModel)
     @Column(DataType.INTEGER)
-    cursoId!: number;
+    cursoId!: number; // FK a Curso
 
     @Column(DataType.INTEGER)
     botId!: number;
@@ -15,7 +14,7 @@ export class BotCursoModel extends Model {
     @Column(DataType.STRING)
     botNombre!: string;
 
+    // 🔄 Relación inversa (pertenece a un Curso)
     @BelongsTo(() => CursoModel)
     curso!: CursoModel;
-
 }

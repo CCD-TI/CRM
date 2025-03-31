@@ -7,6 +7,8 @@ cursoRoutes.post('/', CursoController.createCurso);
 cursoRoutes.put('/:id', CursoController.updateCurso);
 cursoRoutes.delete('/:id', CursoController.deleteCurso);
 cursoRoutes.get('/', CursoController.findAllCursos);
+cursoRoutes.get('/search', CursoController.searchCursos); 
+
 cursoRoutes.get('/data', (_req:any, res:any) => {
     const data = dataCursos
     return res.json(data);

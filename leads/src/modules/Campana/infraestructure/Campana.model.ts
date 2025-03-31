@@ -8,8 +8,14 @@ export class CampanaModel extends Model {
     name!: string;
 
     @Column(DataType.INTEGER)
-    RedCampanaId!: string;
+    RedCampanaId!: number;
 
+    @Column({
+        type: DataType.INTEGER,
+        defaultValue: 1 // Valor por defecto cuando no se envía en la inserción
+    })  
+    status!: number;
+    
     @ForeignKey(() => PaginaModel)
     @Column(DataType.INTEGER)
     paginaId!: number;

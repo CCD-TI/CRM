@@ -1,6 +1,7 @@
 import PaginaRepository from "../domain/PaginaRepository"
 import Pagina from "../domain/Pagina"
 import { PaginaModel } from "./Pagina.model";
+import { Op } from "sequelize";
 export default class SequelizePaginaRepository implements PaginaRepository {
     
     async create(pagina: Pagina): Promise<void> {
@@ -10,17 +11,13 @@ export default class SequelizePaginaRepository implements PaginaRepository {
         });
         return Promise.resolve();
     }
-    async update(pagina: Pagina): Promise<void> {
-        await PaginaModel.update({
-            name: pagina.name,
-            RedPaginaId: pagina.RedPaginaId
-        }, {
-            where: {
-                id: pagina.id
-            }
-        });
-        return Promise.resolve();
+    async update(id:number, pagina: Pagina): Promise<Pagina> {
+        await PaginaModel.update(pagina as any, { where: { id } });
+        return pagina;
     }
+
+
+
     async delete(id: number): Promise<void> {
         await PaginaModel.destroy({
             where: {
@@ -34,12 +31,51 @@ export default class SequelizePaginaRepository implements PaginaRepository {
         if (!pagina) {
             throw new Error("Pagina no encontrada");
         }
-        const paginaFound = new Pagina(pagina.id, pagina.name, pagina.RedPaginaId);
+        const paginaFound = new Pagina( pagina.name, pagina.RedPaginaId,pagina.status,pagina.createdAt); 
         return Promise.resolve(paginaFound);
     }
     async findAll(): Promise<Pagina[]> {
-        const paginas = await PaginaModel.findAll();
-        const mappedpaginas = paginas.map((pagina) => new Pagina(pagina.id, pagina.name, pagina.RedPaginaId));
-        return Promise.resolve(mappedpaginas);
+        const cursos = await PaginaModel.findAll();
+        return cursos.map((pagina) => pagina.get({ plain: true }) as Pagina);
+    }
+
+
+    async searchExact(term: string): Promise<Pagina[]> {
+        const cursos = await PaginaModel.findAll({
+            where: 
+             
+                    { name: { [Op.eq]: term } },      // Búsqueda exacta por nombre
+                   
+               
+                
+            
+            limit: 10
+        });
+        return cursos.map((PaginaModel) => new Pagina(
+            PaginaModel.name,
+            PaginaModel.id,
+            PaginaModel.RedPaginaId,
+            PaginaModel.createdAt,
+            PaginaModel.status
+            
+          
+        ));
+    }
+    
+    async searchPartial(term: string): Promise<Pagina[]> {
+        const cursos = await PaginaModel.findAll({
+            where: {
+                name: { [Op.like]: `%${term}%` } // Debe ser name, NO id
+            },
+            limit: 10
+        });
+        return cursos.map((PaginaModel) => ({
+            name: PaginaModel.name,
+            RedPaginaId: PaginaModel.RedPaginaId,
+            id: PaginaModel.id,
+            createdAt: PaginaModel.createdAt,
+            status: PaginaModel.status
+        }) as Pagina);
     }
 }
+

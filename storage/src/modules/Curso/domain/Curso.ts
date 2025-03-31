@@ -1,3 +1,5 @@
+// import Bot from "../../BotCurso/domain/BotCurso"
+
 export default class Curso {
     constructor(
         public nombre: string,
@@ -6,6 +8,7 @@ export default class Curso {
         public flowId: number,
         public flowNombre: string,
         public templateNombre: string,
+        // public bots: Bot[] = [],
         public id?: number
     ) {}
 }

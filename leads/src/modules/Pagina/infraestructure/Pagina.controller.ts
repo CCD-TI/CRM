@@ -18,12 +18,13 @@ export default class PaginaController {
         }
     }
     static async update(req: Request, res: Response): Promise<void> {
-        try {
-            const validatedData = PaginaSchema.parse(req.body);
-            await paginaService.update(validatedData);
-            res.status(200).json({ message: "Pagina actualizada"});
+       try {
+            const id = Number(req.params.id);
+            const parsedData = PaginaSchema.parse(req.body);
+            const curso = await paginaService.updateCurso(id, parsedData);
+            res.status(200).json(curso);
         } catch (error) {
-            res.status(500).json({ error: error });
+            res.status(400).json({ message: error });
         }
     }
     static async delete(req: Request, res: Response): Promise<void> {
@@ -36,7 +37,7 @@ export default class PaginaController {
             res.status(500).json({ error: error });
         }
     }
-    static async findAll(req: Request, res: Response): Promise<void> {
+    static async findAll(_req: Request, res: Response): Promise<void> {
         try {
             const paginas = await paginaService.findAll();
             res.status(200).json(paginas);
@@ -54,4 +55,35 @@ export default class PaginaController {
             res.status(404).json({ error: "Campaña no encontrada" });
         }
     }
+
+    static async searchCursos(req: Request, res: Response) {
+        try {
+            const searchTerm = req.query.q as string;
+            const paginaService = new PaginaService(new SequelizePaginaRepository());
+    
+            // 1. Definir resultados fuera del condicional
+            let resultados;
+            
+            if (!searchTerm || searchTerm.trim() === '') {
+                resultados = await paginaService.findAll();
+            } else {
+                resultados = await paginaService.searchCursos(searchTerm);
+            }
+    
+            // 2. Single Response Principle - Una sola respuesta
+             res.status(200).json(resultados);
+    
+        } catch (error) {
+            console.error('Error en searchCursos:', error);
+            
+            // 3. Verificar que no se haya enviado respuesta previamente
+            if (!res.headersSent) {
+                 res.status(500).json({
+                    message: 'Error al realizar la búsqueda',
+                    error: error instanceof Error ? error.message : 'Unknown error'
+                });
+            }
+        }
+    }
+    
 }
