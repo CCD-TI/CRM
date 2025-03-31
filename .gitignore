@@ -7,3 +7,10 @@
 **/dist/
 
 **/build/
+
+
+**/__pycache__
+**/session
+**/sessions
+**/telegram
+**/temp

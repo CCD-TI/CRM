@@ -264,6 +264,8 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      rabbitmq:
+        condition: service_started
     networks:
       - ${NETWORK}
     command: ["npm", "run", "dev"]
@@ -274,7 +276,34 @@ services:
           target: /app
           ignore:
             - node_modules/
-
+  telebot:
+    container_name: telebot
+    build: 
+      context: ./telebot
+    ports:
+      - "8007:8007"
+    environment:
+      - PORT=8007
+      - DB_NAME=${DB_NAME_TELEBOT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - HOST_RABBITMQ=${HOST_RABBITMQ}
+      - USER_RABBITMQ=${USER_RABBITMQ}
+      - PASSWORD_RABBITMQ=${PASSWORD_RABBITMQ}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    networks:
+      - ${NETWORK}
+    command: ["python", "src/App.py"]
+    develop:
+      watch:
+        - action: sync
+          path: ./telebot
+          target: /app
 volumes:
   mysql_data:
 
