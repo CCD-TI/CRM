@@ -23,7 +23,8 @@ services:
       - "6379:6379"   # Puerto para Redis
   mysql:
     image: mysql:8
-    container_name: mysql
+    container_name: ${DB_HOST_MYSQL_DOCKER}
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_MYSQL_DOCKER}
       MYSQL_USER: paul
@@ -43,6 +44,7 @@ services:
       - ./init-scripts:/docker-entrypoint-initdb.d
   gateway:
     container_name: gateway
+    restart: always
     build:
       context: ./gateway
     ports:
@@ -61,6 +63,7 @@ services:
   
   masivos:
     container_name: masivos
+    restart: always
     build:
       context: ./masivos
     ports:
@@ -96,8 +99,6 @@ services:
         condition: service_started
       mysql:
         condition: service_healthy
-    volumes:
-      - "//./pipe/docker_engine:/var/run/docker.sock"
     networks:
       - ${NETWORK}
     user: root
@@ -105,6 +106,7 @@ services:
 
   gestor-archivos:
     container_name: gestor
+    restart: always
     build:
       context: ./gestor-archivos
     ports:
@@ -132,6 +134,7 @@ services:
 
   leads: 
     container_name: leads
+    restart: always
     build:
       context: ./leads
     ports:
@@ -158,6 +161,7 @@ services:
   
   storage: 
     container_name: storage
+    restart: always
     build:
       context: ./storage
     ports:
@@ -180,6 +184,7 @@ services:
   
   usuarios: 
     container_name: usuarios
+    restart: always
     build:
       context: ./usuarios
     ports:
@@ -202,6 +207,7 @@ services:
     command: ["npm", "run", "start"]
   mailing: 
     container_name: mailing
+    restart: always
     build:
       context: ./mailing
     ports:
@@ -224,6 +230,30 @@ services:
     networks:
       - ${NETWORK}
     command: ["npm", "run", "start"]
+  telebot:
+    container_name: telebot
+    restart: always
+    build: 
+      context: ./telebot
+    ports:
+      - "8007:8007"
+    environment:
+      - PORT=8007
+      - DB_NAME=${DB_NAME_TELEBOT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - HOST_RABBITMQ=${HOST_RABBITMQ}
+      - USER_RABBITMQ=${USER_RABBITMQ}
+      - PASSWORD_RABBITMQ=${PASSWORD_RABBITMQ}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    networks:
+      - ${NETWORK}
+    command: ["python", "src/App.py"]
 volumes:
   mysql_data:
 networks:

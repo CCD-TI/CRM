@@ -1,0 +1,9 @@
+Flask
+Flask-SQLAlchemy
+mysql-connector-python
+Telethon
+Pydantic
+requests
+pika
+aiohttp
+python-dotenv
