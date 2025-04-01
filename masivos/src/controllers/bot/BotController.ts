@@ -323,7 +323,7 @@ class BotController {
     try {
       // Intentar conectarse al bot
 
-      const response = await fetch(`http://localhost:${port}/v1/codigo`);
+      const response = await fetch(`http://172.18.0.1:${port}/v1/codigo`);
       if (response.ok) {
         const { pairingCode } = await response.json(); // Si la respuesta es exitosa, retornamos el JSON
         return res.status(200).json({ pairingCode });

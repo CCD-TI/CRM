@@ -99,8 +99,6 @@ services:
         condition: service_started
       mysql:
         condition: service_healthy
-    volumes:
-      - "//./pipe/docker_engine:/var/run/docker.sock"
     networks:
       - ${NETWORK}
     user: root

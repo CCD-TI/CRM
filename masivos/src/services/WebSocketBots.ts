@@ -43,7 +43,7 @@ export class WebSocketBots {
           }else{
             try {
 
-              const data = await this.fetchWithTimeout(`http://localhost:${bot.port}/v1/codigo`, 5000); // 5 segundos de timeout
+              const data = await this.fetchWithTimeout(`http://172.18.0.1:${bot.port}/v1/codigo`, 5000); // 5 segundos de timeout
               
               //console.log("Datos recibidos:", { pairingCode: data.pairingCode, status: data.status });
 
@@ -72,7 +72,7 @@ export class WebSocketBots {
               
               // Intentamos una segunda vez antes de marcarlo como inactivo
               try {
-                  await this.fetchWithTimeout(`http://localhost:${bot.port}/v1/codigo`, 5000);
+                  await this.fetchWithTimeout(`http://172.18.0.1:${bot.port}/v1/codigo`, 5000);
                   
                   //console.log(`Segunda verificación exitosa para bot ${bot.containerId}:`, data);
                   statuses.push({ containerId: bot.containerId, phone: bot.phone, status: "activo" });
