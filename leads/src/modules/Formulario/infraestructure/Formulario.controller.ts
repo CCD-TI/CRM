@@ -55,4 +55,35 @@ export default class FormularioController {
             res.status(404).json({ error: "Formulario no encontrado" });
         }
     }
+
+
+     static async searchCursos(req: Request, res: Response) {
+            try {
+                const searchTerm = req.query.q as string;
+                const paginaService = new FormularioService(new SequelizeFormularioRepository());
+        
+                // 1. Definir resultados fuera del condicional
+                let resultados;
+                
+                if (!searchTerm || searchTerm.trim() === '') {
+                    resultados = await paginaService.findAll();
+                } else {
+                    resultados = await paginaService.searchCursos(searchTerm);
+                }
+        
+                // 2. Single Response Principle - Una sola respuesta
+                 res.status(200).json(resultados);
+        
+            } catch (error) {
+                console.error('Error en searchCursos:', error);
+                
+                // 3. Verificar que no se haya enviado respuesta previamente
+                if (!res.headersSent) {
+                     res.status(500).json({
+                        message: 'Error al realizar la búsqueda',
+                        error: error instanceof Error ? error.message : 'Unknown error'
+                    });
+                }
+            }
+        }
 }

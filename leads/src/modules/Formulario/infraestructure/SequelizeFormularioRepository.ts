@@ -2,6 +2,7 @@ import FormularioRepository from "@Formulario/domain/FormularioRepository";
 import { FormularioModel } from "./Formulario.model";
 import Formulario from "../domain/Formulario";
 import { FormularioSchema } from '@Formulario/domain/Formulario.schema';
+import { Op } from "sequelize";
 
 export default class SequelizeFormularioRepository implements FormularioRepository{
     async create(formulario: Formulario): Promise<void> {
@@ -11,7 +12,8 @@ export default class SequelizeFormularioRepository implements FormularioReposito
                 RedFormularioId: formulario.RedFormularioId,
                 cursoId: formulario.cursoId,
                 campanaId: formulario.campanaId,
-                botId: formulario.botId
+                botId: formulario.botId,
+                botName: formulario.botName
             });
         } catch (error) {
             return Promise.reject(error);
@@ -24,7 +26,9 @@ export default class SequelizeFormularioRepository implements FormularioReposito
                 RedFormularioId: formulario.RedFormularioId,
                 cursoId: formulario.cursoId,
                 campanaId: formulario.campanaId,
-                botId: formulario.botId
+                botId: formulario.botId,
+                botName: formulario.botName,
+                status: formulario.status
             }, {
                 where: {
                     id: formulario.id
@@ -52,7 +56,18 @@ export default class SequelizeFormularioRepository implements FormularioReposito
             if (!formulario) {
                 throw new Error("Formulario no encontrado");
             }
-            const formularioFound = new Formulario( formulario.name, formulario.RedFormularioId, formulario.cursoId, formulario.campanaId, formulario.botId, formulario.id);
+            const formularioFound = new Formulario( 
+                formulario.name, 
+                formulario.RedFormularioId, 
+                formulario.cursoId, 
+                formulario.status, 
+                formulario.campanaId,
+                formulario.id, 
+                formulario.botId,
+                formulario.botName,
+                formulario.createdAt, 
+                formulario.updatedAt,
+                );
             return Promise.resolve(formularioFound);
         } catch (error) {
             return Promise.reject(error);
@@ -79,10 +94,49 @@ export default class SequelizeFormularioRepository implements FormularioReposito
     async findAll(): Promise<Formulario[]> {
         try {
             const formularios = await FormularioModel.findAll();
-            const mappedformularios = formularios.map((formulario) => new Formulario(formulario.name, formulario.RedFormularioId, formulario.cursoId, formulario.campanaId, formulario.botId, formulario.id));
+            const mappedformularios = formularios.map((formulario) => new Formulario(
+                    formulario.name, 
+                    formulario.RedFormularioId, 
+                    formulario.cursoId,
+                     formulario.status,
+                     formulario.campanaId, 
+                     formulario.id,
+                     formulario.botId, 
+                     formulario.botName, 
+                     formulario.createdAt, 
+                     formulario.updatedAt, 
+                    ));
             return Promise.resolve(mappedformularios);
         } catch (error) {
             return Promise.reject(error);
         }
     }
+
+     async searchExact(term: string): Promise<Formulario[]> {
+            const Formulario = await FormularioModel.findAll({
+                where: 
+                 
+                        { name: { [Op.eq]: term } },      // Búsqueda exacta por nombre
+                       
+                   
+                    
+                
+                limit: 10,
+                raw: true,
+            });
+            return Formulario
+        }
+        
+        async searchPartial(term: string): Promise<Formulario[]> {
+            const Formulario = await FormularioModel.findAll({
+                where: {
+                    name: { [Op.like]: `%${term}%` } // Debe ser name, NO id
+                },
+                limit: 10,
+                raw: true,
+            });
+            return Formulario
+        }
+    
+    
 }

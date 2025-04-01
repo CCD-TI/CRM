@@ -28,5 +28,7 @@ export class FormularioModel extends Model {
 
   @Column(DataType.INTEGER)
   botId!: number;
+  @Column(DataType.STRING)
+  botName!: string;
 
 }

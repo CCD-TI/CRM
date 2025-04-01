@@ -10,5 +10,8 @@ export default class Formulario {
         public id?: number,
         public campanaId?: number,
         public botId?: number,
+        public botName?: string,
+        public createdAt?: Date,
+        public updatedAt?: Date
     ) {}
 }

@@ -7,7 +7,7 @@ export class CursoModel extends Model {
     nombre!: string;
 
     @Column(DataType.STRING)
-    Nomenclatura!: string;
+    nomenclatura!: string;
 
     @Column(DataType.INTEGER)
     flowId!: number;

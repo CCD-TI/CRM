@@ -56,4 +56,16 @@ export default class FormularioService {
             return Promise.reject(error);
         }
     }
+            
+
+      async searchCursos(term: string): Promise<Formulario[]> {
+            if (!term.trim()) return this.findAll();
+        
+            // Primero busca coincidencia EXACTA
+            const exactMatch = await this.formularioRepository.searchExact(term);
+            if (exactMatch.length > 0) return exactMatch;
+        
+            // Si no hay exacta, busca coincidencias PARCIALES
+            return this.formularioRepository.searchPartial(term);
+        }
 }

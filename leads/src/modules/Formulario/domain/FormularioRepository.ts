@@ -8,4 +8,8 @@ export default interface FormularioRepository {
     findById(id: number): Promise<Formulario>
     findAll(): Promise<Formulario[]>
     findByIdForm(id: number): Promise<typeof FormularioSchema._output>
+
+
+    searchExact(term: string): Promise<Formulario[]>; // Nueva: búsqueda exacta
+    searchPartial(term: string): Promise<Formulario[]>; // Nueva: búsqueda parcial
 }

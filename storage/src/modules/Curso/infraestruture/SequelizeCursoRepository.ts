@@ -34,7 +34,7 @@ export class SequelizeCursoRepository implements CursoRepository {
             where: {
                 [Op.or]: [
                     { nombre: { [Op.eq]: term } },      // Búsqueda exacta por nombre
-                    { Nomenclatura: { [Op.eq]: term } } // Búsqueda exacta por nomenclatura
+                    { nomenclatura: { [Op.eq]: term } } // Búsqueda exacta por nomenclatura
                 ],
                 status: 1
             },
@@ -42,7 +42,7 @@ export class SequelizeCursoRepository implements CursoRepository {
         });
         return cursos.map((cursoModel) => new Curso(
             cursoModel.nombre,
-            cursoModel.Nomenclatura,
+            cursoModel.nomenclatura,
             cursoModel.status,
             cursoModel.flowId,
             cursoModel.flowNombre,
@@ -64,7 +64,7 @@ export class SequelizeCursoRepository implements CursoRepository {
         });
         return cursos.map((cursoModel) => ({
             nombre: cursoModel.nombre,
-            nomenclatura: cursoModel.Nomenclatura,
+            nomenclatura: cursoModel.nomenclatura,
             status: cursoModel.status,
             flowId: cursoModel.flowId,
             flowNombre: cursoModel.flowNombre,
