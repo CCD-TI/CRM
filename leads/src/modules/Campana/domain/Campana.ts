@@ -3,7 +3,7 @@ export default class Campana {
         public name: string,
         public RedCampanaId: string,
         public paginaId: number,
-        public status: number = 1,
+        public status: number,
         createdAt?: Date | undefined,
         public id?: number,
     ) {}

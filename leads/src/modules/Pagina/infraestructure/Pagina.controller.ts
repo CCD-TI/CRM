@@ -58,7 +58,7 @@ export default class PaginaController {
 
     static async searchCursos(req: Request, res: Response) {
         try {
-            const {searchTerm} = req.body;
+            const searchTerm = req.query.q as string;
             const paginaService = new PaginaService(new SequelizePaginaRepository());
     
             // 1. Definir resultados fuera del condicional

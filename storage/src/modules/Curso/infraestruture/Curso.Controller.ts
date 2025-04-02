@@ -54,7 +54,7 @@ export class CursoController{
     static async searchCursos(req: Request, res: Response) {
         try {
             const searchTerm = req.query.q as string;
-            const cursoService = new CursoService(new SequelizeCursoRepository());
+           
     
             // 1. Definir resultados fuera del condicional
             let resultados;
