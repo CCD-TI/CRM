@@ -60,15 +60,14 @@ export default class FormularioController {
      static async searchCursos(req: Request, res: Response) {
             try {
                 const searchTerm = req.query.q as string;
-                const paginaService = new FormularioService(new SequelizeFormularioRepository());
         
                 // 1. Definir resultados fuera del condicional
                 let resultados;
                 
                 if (!searchTerm || searchTerm.trim() === '') {
-                    resultados = await paginaService.findAll();
+                    resultados = await formularioService.findAll();
                 } else {
-                    resultados = await paginaService.searchCursos(searchTerm);
+                    resultados = await formularioService.searchCursos(searchTerm);
                 }
         
                 // 2. Single Response Principle - Una sola respuesta

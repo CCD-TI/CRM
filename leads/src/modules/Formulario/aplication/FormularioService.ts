@@ -56,7 +56,7 @@ export default class FormularioService {
             return Promise.reject(error);
         }
     }
-            
+
 
       async searchCursos(term: string): Promise<Formulario[]> {
             if (!term.trim()) return this.findAll();

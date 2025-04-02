@@ -17,10 +17,10 @@ export default class SequelizeCampanaRepository implements CampanaRepository {
            return campana;
        }
    
-    async delete(id: number): Promise<void> {
+    async delete(paginaId: number): Promise<void> {
         await CampanaModel.destroy({
             where: {
-                id
+                paginaId 
             }
         });
         return Promise.resolve();
