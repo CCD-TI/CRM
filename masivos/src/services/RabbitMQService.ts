@@ -10,7 +10,7 @@ const rabbitSettings = {
   authMechanism: ["PLAIN", "AMQPLAIN", "EXTERNAL"],
 };
 
-const queues = ["leads", "bases", "emailQueue"]; // Lista de colas a declarar
+const queues = ["leads", "bases", "emailQueue", "sms"]; // Lista de colas a declarar
 
 class RabbitMQService {
   private static instance: RabbitMQService;

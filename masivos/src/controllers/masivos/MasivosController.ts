@@ -15,18 +15,14 @@ class MasivosController {
             where: { number: numero },
             defaults: { number: numero , status: true, metodo: "MASIVO"},
           });
-      }
+        }
 
       const leads = await Leads.findAll({
         where: { number: numeros },
       });
-
-      console.log(masivos);
       
-
       // Enviar mensaje a la cola para cada número
       const rabbitMQ = await RabbitMQService.getInstance();
-      console.log("funciona hasta aca");
       
       //registrando masivo
       const nuevoMasivo = await Masivos.create({
