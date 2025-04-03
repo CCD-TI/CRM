@@ -24,7 +24,7 @@ const interesado = addKeyword([EVENTS.ACTION, "1", "asesor","Asesor", "lista","L
   .addAction(async (ctx) => {
     const name = ctx.name;
     const phone = ctx.from;
-    await fetch(`http://${ruta_local_orquestador}:8000/api/leads`, {
+    await fetch(`http://${ruta_local_orquestador}:8000/api/masivo/leads`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -43,7 +43,7 @@ const nointeresado = addKeyword([EVENTS.ACTION, "2", "no","NO","No"], {sensitive
 ).addAction(async (ctx) => {
   const name = ctx.name;
   const phone = ctx.from;
-  await fetch(`http://${ruta_local_orquestador}:8000/api/leads`, {
+  await fetch(`http://${ruta_local_orquestador}:8000/api/masivo/leads`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

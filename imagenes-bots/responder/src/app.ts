@@ -50,7 +50,8 @@ const flujo = addKeyword<Provider, Database>(["1", "2", "3", "4", "5", "6", "7",
   
 const main = async () => {
     const adapterFlow = createFlow([flujo, mensajefinal]) //Limitar a solo enviar si es más de 1 curso
-    const adapterProvider = createProvider(Provider, { usePairingCode: true, phoneNumber})
+    const flagusePairingCode = process.env.USE_PAIRING_CODE === "true";
+    const adapterProvider = createProvider(Provider, { usePairingCode: flagusePairingCode, phoneNumber})
     const config = {
       host: process.env.DB_HOST ?? '127.0.0.1',
       user: process.env.DB_USER ?? 'paul',
@@ -155,9 +156,9 @@ const main = async () => {
         handleCtx(async (bot, req, res) => {
             const pairingCode = bot.provider.vendor.authState.creds.pairingCode;
             const status = bot.provider.vendor.authState.creds.registered;
-
+            const me = bot.provider.vendor.authState.creds.me;
             res.writeHead(200, { 'Content-Type': 'application/json' })
-            return res.end(JSON.stringify({ pairingCode: pairingCode, status}))
+            return res.end(JSON.stringify({ pairingCode: pairingCode, status, me}))
         })
     )
     httpServer(+PORT)

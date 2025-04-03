@@ -81,7 +81,7 @@ export const startRabbitConsumer = async (adapterProvider: BaileysProvider, ruta
               channel.ack(msg);
             } catch (sendErr: any) {
               console.error("Error al enviar mensaje:", sendErr);
-              await fetch(`http://${ruta_local_orquestador}:8000/api/masivos/failmessage`, {
+              await fetch(`http://${ruta_local_orquestador}:8000/api/masivo/masivos/failmessage`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ number, error: sendErr.message }),

@@ -1,7 +1,7 @@
 
 const ruta_local_orquestador = process.env.RUTA_LOCAL_ORQUESTADOR ?? '172.18.0.1'; //'172.18.0.1'
 const updateCursobyPhone = async (phone: string, curso: string): Promise<boolean> => {
-    const respuesta = await fetch(`http://${ruta_local_orquestador}:8000/api/leads`, {
+    const respuesta = await fetch(`http://${ruta_local_orquestador}:8000/api/masivo/leads`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -18,7 +18,7 @@ const updateCursobyPhone = async (phone: string, curso: string): Promise<boolean
 }
 
 export const consultar = async (phone: string):Promise<{ flag: boolean, cursos: string }> => {
-    const respuesta = await fetch(`http://${ruta_local_orquestador}:8000/api/leads?number=${phone}`, {
+    const respuesta = await fetch(`http://${ruta_local_orquestador}:8000/api/masivo/leads?number=${phone}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" }
     });

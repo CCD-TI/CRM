@@ -63,7 +63,7 @@ export const startRabbitConsumer = async (adapterProvider: BaileysProvider, ruta
                 }
                 
               }
-              await fetch(`http://${ruta_local_orquestador}:8000/api/asignaciones/changestatus`, {
+              await fetch(`http://${ruta_local_orquestador}:8000/api/masivo/asignaciones/changestatus`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ asignacion ,number, status: 'ENVIADO' }),
@@ -71,7 +71,7 @@ export const startRabbitConsumer = async (adapterProvider: BaileysProvider, ruta
               channel.ack(msg);
             } catch (sendErr: any) {
               console.error("Error al enviar mensaje:", sendErr);
-              await fetch(`http://${ruta_local_orquestador}:8000/api/asignaciones/failmessage`, {
+              await fetch(`http://${ruta_local_orquestador}:8000/api/masivo/asignaciones/failmessage`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ asignacion, number, error: sendErr.message }),
@@ -80,7 +80,7 @@ export const startRabbitConsumer = async (adapterProvider: BaileysProvider, ruta
             }
           } else {
             console.log("Número no está en WhatsApp:", number);
-            await fetch(`http://${ruta_local_orquestador}:8000/api/asignaciones/failmessage`, {
+            await fetch(`http://${ruta_local_orquestador}:8000/api/masivo/asignaciones/failmessage`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ asignacion, number, error: 'Número no está en WhatsApp' }),

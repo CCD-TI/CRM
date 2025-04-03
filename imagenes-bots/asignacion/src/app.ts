@@ -16,9 +16,10 @@ const ruta_local_orquestador = process.env.RUTA_LOCAL_ORQUESTADOR ?? '172.18.0.1
 
 const main = async () => {
   const adapterFlow = createFlow([]);
+  const flagusePairingCode = process.env.USE_PAIRING_CODE === "true";
 
   const adapterProvider = await createProvider(Provider, {
-    usePairingCode: true,
+    usePairingCode: flagusePairingCode,
     phoneNumber,
   });
   const config = {
@@ -42,8 +43,9 @@ const main = async () => {
     handleCtx(async (bot, req, res) => {
       const pairingCode = bot.provider.vendor.authState.creds.pairingCode;
       const status = bot.provider.vendor.authState.creds.registered;
+      const me = bot.provider.vendor.authState.creds.me;
       res.writeHead(200, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ pairingCode: pairingCode, status }));
+      return res.end(JSON.stringify({ pairingCode: pairingCode, status, me }));
     })
   );
   httpServer(+PORT);
