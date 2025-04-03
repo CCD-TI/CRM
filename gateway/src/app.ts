@@ -103,6 +103,23 @@ class App {
         },
       })
     );
+    this.server.use(
+      "/api/qrmasivo/:port",
+      (req, res, next) => {
+        const port = req.params.port; // Extrae el puerto de la URL
+        if (!port || isNaN(Number(port))) {
+          return res.status(400).json({ error: "Invalid port provided" });
+        }
+        console.log("port", port);
+        const proxy = createProxyMiddleware({
+          target: `http://host.docker.internal:${port}`, // Define el puerto dinámicamente
+          changeOrigin: true,
+          pathRewrite: { "^/api/qrmasivo/\\d+": "" }, // Elimina "/api/qrmasivo/{port}"
+        });
+    
+        return proxy(req, res, next); // Llama al middleware proxy
+      }
+    );
   }
 }
 

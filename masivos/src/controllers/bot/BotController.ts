@@ -9,7 +9,7 @@ import { getLastPort } from "../../utils/getLastPort";
 class BotController {
   createBot = async (req: any, res: any) => {
     try {
-      const { phone, imagebot, namebot } = req.body;
+      const { phone, imagebot, namebot, useparingcode } = req.body;
       if (!phone || isNaN(phone) || phone.length < 9) {
         return res.status(400).json({ error: "Número de teléfono inválido" });
       }
@@ -36,7 +36,8 @@ class BotController {
           `DB_PORT=3307`,
           `HOST_RABBITMQ=${HOST_RABBITMQ}`,
           `USER_RABBITMQ=${USER_RABBITMQ}`,
-          `PASSWORD_RABBITMQ=${PASSWORD_RABBITMQ}`
+          `PASSWORD_RABBITMQ=${PASSWORD_RABBITMQ}`,
+          `USE_PAIRING_CODE=${useparingcode}`
           ],
         ExposedPorts: {
           "3000/tcp": {}, // Puerto expuesto dentro del contenedor

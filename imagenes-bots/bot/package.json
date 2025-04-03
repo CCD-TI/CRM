@@ -16,6 +16,7 @@
     "@builderbot/database-mysql": "^1.2.5",
     "@builderbot/provider-baileys": "1.2.4",
     "amqplib": "^0.10.5",
+    "dotenv": "^16.4.7",
     "sharp": "^0.33.5"
   },
   "devDependencies": {

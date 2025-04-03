@@ -9,7 +9,8 @@ import { MysqlAdapter as Database } from "@builderbot/database-mysql";
 import { BaileysProvider as Provider } from "@builderbot/provider-baileys";
 import { startRabbitConsumer } from "./rabbit/consumer";
 import { LimpiezaSession } from "./LimpiezaBotSession/LimpiezaBotSession";
-
+import {config} from "dotenv"
+config()
 const PORT = 3000;
 const phoneNumber = process.env.PHONE ?? "51948701436";
 const ruta_local_orquestador = process.env.RUTA_LOCAL_ORQUESTADOR ?? '172.18.0.1';
@@ -81,9 +82,9 @@ const welcome = addKeyword<Provider, Database>(EVENTS.WELCOME).addAnswer(
 
 const main = async () => {
   const adapterFlow = createFlow([welcome, interesado, nointeresado]);
-
+  const flagusePairingCode = process.env.USE_PAIRING_CODE === "true";
   const adapterProvider = await createProvider(Provider, {
-    usePairingCode: true,
+    usePairingCode: flagusePairingCode,
     phoneNumber,
   });
   const config = {
@@ -120,22 +121,27 @@ const main = async () => {
   adapterProvider.server.get(
     "/v1/codigo",
     handleCtx(async (bot, req, res) => {
-      const pairingCode = bot.provider.vendor.authState.creds.pairingCode;
-      const status = bot.provider.vendor.authState.creds.registered;
+      const pairingCode = bot.provider.vendor.authState.creds.pairingCode ?? '';
+      const status = bot.provider.vendor.authState.creds.registered ?? false;
+      const me = bot.provider.vendor.authState.creds.me;
       res.writeHead(200, { "Content-Type": "application/json" });
-      return res.end(JSON.stringify({ pairingCode: pairingCode, status }));
+      return res.end(JSON.stringify({ pairingCode: pairingCode, status, me}));
     })
   );
   httpServer(+PORT);
 
   // Esperar a que el bot esté conectado antes de iniciar RabbitMQ
   const waitForBotConnection = async () => {
-    while (!adapterProvider?.vendor?.authState?.creds?.registered) {
+    console.log("se ejecuta inicio de waiforconnection")
+    console.log(adapterProvider.vendor?.authState?.creds?.me);
+    while (adapterProvider.vendor?.authState?.creds?.me === undefined) {
       console.log("Waiting for WhatsApp connection...");
       await new Promise((resolve) => setTimeout(resolve, 5000));
     }
+
     console.log("Bot conectado a WhatsApp!");
-    await startRabbitConsumer(adapterProvider, ruta_local_orquestador);
+    //await startRabbitConsumer(adapterProvider, ruta_local_orquestador);
+    
     LimpiezaSession();
   };
 
