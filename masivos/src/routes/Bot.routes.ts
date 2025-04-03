@@ -14,5 +14,7 @@ BotRouter.post("/stop", botController.stopBotbyContainerID);
 BotRouter.post("/findByIds", botController.getBotsByIds);
 BotRouter.get("/ultimo", botController.getprueba)
 BotRouter.post("/search", botController.search);
+BotRouter.delete("/:id", botController.deleteBot);
 BotRouter.delete("/deletecache/:id", botController.deleteCache);
+
 export default BotRouter;

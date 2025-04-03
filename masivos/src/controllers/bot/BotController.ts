@@ -95,6 +95,48 @@ class BotController {
       res.status(500).json({ error: "Error al crear el bot" });
     }
   };
+  deleteBot = async (req: any, res: any) => {
+    try {
+      const { id } = req.params;
+      const bot = await Bot.findByPk(id);
+      if (!bot) {
+        return res.status(404).json({ error: "Bot no encontrado" });
+      }
+      const docker = DockerService.getInstance().getDocker();
+      const container = docker.getContainer(bot.containerId);
+      const data = await container.inspect();
+      if(!data.State.Running){
+        await container.start();
+      }
+      const exec = await container.exec({
+        Cmd: ['sh', '-c', 'rm -rf /app/bot_sessions/* && echo "Deleted"'],
+        AttachStdout: true,
+        AttachStderr: true
+      });
+      const stream = await exec.start({});
+      stream.on('data', (data: Buffer) => {
+        console.log('stdout:', data.toString());
+      });
+      stream.on('error', (err) => {
+        console.error('Error en la ejecución:', err);
+      });
+      stream.on('end', async () => {
+        console.log('Contenido de la carpeta /app/bot_sessions borrado.');
+        // Detener y eliminar el contenedor después de borrar los archivos
+        await container.stop();
+        await container.remove();
+        // Actualizar el estado del bot
+        await bot.destroy();
+        // Responder al cliente después de la ejecución exitosa
+        res.status(200).json({
+          message:
+            "Contenido de la carpeta 'sessions' borrado, contenedor detenido y bot eliminado con éxito.",
+        });
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message, message: "Error al eliminar el bot" });
+    }
+  };
 
   startBots = async (_req: any, res: any) => {
     try {
