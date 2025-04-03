@@ -8,7 +8,7 @@ import path from 'path';
 
 type SendEmailPayload = {
   email: string;
-  Template: "Generic" | "General";
+  Template: "Curso" | "General";
   image_url?: string;
   document_url?: string;
   video_url?: string;

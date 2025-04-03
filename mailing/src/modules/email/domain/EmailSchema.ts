@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const EmailSchema = z.object({
   email: z.string().email(),
-  Template: z.enum(["Generic", "General"]),
+  Template: z.enum(["Curso", "General"]),
   image_url: z.string().optional(),
   document_url: z.string().optional(),
   video_url: z.string().optional(),
