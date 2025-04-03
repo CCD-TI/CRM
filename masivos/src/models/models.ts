@@ -3,6 +3,8 @@ import { Asignaciones } from "./Asignaciones";
 import { Bot } from "./Bot";
 import { Flows } from "./Flows";
 import { Leads } from "./Leads";
+import { Mailing } from "./Mailing";
+import { MailingLead } from "./MailingLead";
 import { MasivoLead } from "./MasivoLead";
 import { Masivos } from "./Masivos";
 import { MasivosFlows } from "./MasivosDlows";
@@ -25,5 +27,7 @@ export const models = [
     Roles,
     Sheets,
     Sms,
-    SmsLead
+    SmsLead,
+    Mailing,
+    MailingLead
   ];

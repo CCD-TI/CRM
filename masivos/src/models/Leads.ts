@@ -9,7 +9,7 @@ export class Leads extends Model{
     @Column(DataType.STRING)
     name!: string;
 
-    @AllowNull(false)
+    @AllowNull(true)
     @Unique(true)
     @Column(DataType.STRING)
     number!: string;

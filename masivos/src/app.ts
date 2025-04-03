@@ -10,6 +10,7 @@ import UsuariosRouter from "./routes/Usuarios.routes";
 import ArchivoRouter from "./routes/Archivos.routes";
 import SheetsRouter from "./routes/Sheets.routes";
 import { SmsRouter } from "./routes/Sms.routes";
+import mailingRouter from "./routes/Mailing.routes";
 //import { Authorization } from "./middlewares/Authorization";
 class App {
     private server: Application;
@@ -47,6 +48,7 @@ class App {
       this.server.use("/archivos", ArchivoRouter);
       this.server.use("/sheets", SheetsRouter);
       this.server.use("/sms", SmsRouter);
+      this.server.use("/mailing", mailingRouter);
     }
     public getServer(): Application {
       return this.server;

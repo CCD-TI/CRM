@@ -149,8 +149,27 @@ export class ReportsController {
     import { AsignacionLead } from "../../models/AsignacionLead";
     import { Usuarios } from "../../models/Usuarios";
 import { Sequelize } from "sequelize-typescript";
+import { Mailing } from "../../models/Mailing";
     
     export class ReportsController {
+
+        ReporteMailing = async (_req: any, res: any) => {
+            const mailings = await Mailing.findAll({
+                limit: 1000,
+                order: [["createdAt", "DESC"]]
+            });
+    
+            const formattedMailings = mailings.map(mailing => ({
+                id: mailing.id,
+                name: mailing.name,
+                amountsend: mailing.amountsend,
+                templateName: mailing.templateName,
+                createdAt: mailing.createdAt,
+                updatedAt: mailing.updatedAt
+            }));
+    
+            return res.status(200).json({ mailings: formattedMailings });
+        }
         
         ReporteMasivos = async (_req: any, res: any) => {
             const masivos = await Masivos.findAll({
