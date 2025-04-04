@@ -97,6 +97,7 @@ services:
       - HOST_RABBITMQ=${HOST_RABBITMQ}
       - USER_RABBITMQ=${USER_RABBITMQ}
       - PASSWORD_RABBITMQ=${PASSWORD_RABBITMQ}
+      - HOST_INTERNAL=${HOST_INTERNAL}
     depends_on:
       rabbitmq:
         condition: service_started
