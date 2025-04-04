@@ -112,7 +112,7 @@ class App {
         }
         console.log("port", port);
         const proxy = createProxyMiddleware({
-          target: `http://host.docker.internal:${port}`, // Define el puerto dinámicamente
+          target: `http://172.18.0.1:${port}`, // Define el puerto dinámicamente
           changeOrigin: true,
           pathRewrite: { "^/api/qrmasivo/\\d+": "" }, // Elimina "/api/qrmasivo/{port}"
         });

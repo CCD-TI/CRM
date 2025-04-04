@@ -16,7 +16,7 @@ class BotController {
       const port = await getLastPort();
 
       const db_name = `bot_db_${phone}`;
-      
+
       await DatabaseManager.createDatabase(db_name);
 
       const docker = DockerService.getInstance().getDocker();
@@ -33,7 +33,7 @@ class BotController {
 
       const container = await docker.createContainer({
         Image: imagebot, // Imagen del bot
-        name: `bot-${imagebot}-${phone}`, // Nombre único del contenedor
+        name: `bot_${imagebot}_${phone}`, // Nombre único del contenedor
         Env: [
           `PHONE=51${phone}`,
           `DB_HOST=${DB_HOST_MYSQL_DOCKER}`,
