@@ -81,7 +81,7 @@ class BotController {
 
       await container.start(); // Inicia el contenedor
 
-      const botData = await waitForBot(port); //espera por la inicializacion del bot
+      const botData = await waitForBot(`bot_${imagebot}_${phone}`); //espera por la inicializacion del bot
       console.log(botData);
       // Registrar el Bot
       const newBot = await Bot.create({
