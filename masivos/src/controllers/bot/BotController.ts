@@ -91,7 +91,8 @@ class BotController {
         pairingCode: botData.pairingCode,
         phone,
         tipo: imagebot,
-        db_name
+        db_name,
+        containername: `bot_${imagebot}_${phone}`,
       });
 
       return res.status(201).json({
@@ -99,6 +100,7 @@ class BotController {
         containerId: newBot.containerId,
         port: newBot.port,
         pairingCode: newBot.pairingCode,
+        containername: newBot.containername
       });
     } catch (error: any) {
       console.error("Error al crear el bot:", error);

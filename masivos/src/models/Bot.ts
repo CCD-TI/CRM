@@ -14,6 +14,10 @@ export class Bot extends Model{
     containerId!: string;
 
     @AllowNull(false)
+    @Column(DataType.STRING)
+    containername!: string;
+
+    @AllowNull(false)
     @Column(DataType.INTEGER)
     port!: number;
 
