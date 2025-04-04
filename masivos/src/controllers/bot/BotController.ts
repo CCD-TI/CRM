@@ -18,7 +18,8 @@ class BotController {
       const db_name = `bot_db_${phone}`;
 
       const flag = await DatabaseManager.createDatabase(db_name);
-      if(!flag) res.status(500).json({ message: "Error al crear la DB para el bot"});
+      if(!flag) return res.status(500).json({ message: "Error al crear la DB para el bot"});
+
       const docker = DockerService.getInstance().getDocker();
       console.log("DOCKER_HOST_DEMON:", process.env.DOCKER_HOST_DEMON);
       // Crear y correr un contenedor
@@ -93,7 +94,7 @@ class BotController {
         db_name
       });
 
-      res.status(201).json({
+      return res.status(201).json({
         message: "Bot creado con éxito",
         containerId: newBot.containerId,
         port: newBot.port,
@@ -101,7 +102,7 @@ class BotController {
       });
     } catch (error: any) {
       console.error("Error al crear el bot:", error);
-      res.status(500).json({ error: error.message , message: "Error al crear el bot"});
+      return res.status(500).json({ error: error.message , message: "Error al crear el bot"});
     }
   };
   deleteBot = async (req: any, res: any) => {
