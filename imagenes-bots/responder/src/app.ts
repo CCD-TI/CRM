@@ -53,11 +53,11 @@ const main = async () => {
     const flagusePairingCode = process.env.USE_PAIRING_CODE === "true";
     const adapterProvider = createProvider(Provider, { usePairingCode: flagusePairingCode, phoneNumber})
     const config = {
-      host: process.env.DB_HOST ?? '127.0.0.1',
+      host: process.env.DB_HOST ?? 'mysql',
       user: process.env.DB_USER ?? 'paul',
       database: process.env.DB_NAME ?? 'bot_db_908911275',
       password: process.env.DB_PASSWORD ?? 'paulp',
-      port: 3307
+      port: 3306
     }
     console.log(config)
     const adapterDB = new Database(config);

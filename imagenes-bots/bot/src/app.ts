@@ -88,11 +88,11 @@ const main = async () => {
     phoneNumber,
   });
   const config = {
-    host: process.env.DB_HOST ?? 'localhost',
+    host: process.env.DB_HOST ?? 'mysql',
     user: process.env.DB_USER ?? 'paul',
     database: process.env.DB_NAME ?? 'db_bot',
     password: process.env.DB_PASSWORD ?? 'paulp',
-    port: parseInt(process.env.DB_PORT, 10) ?? 3000
+    port: parseInt(process.env.DB_PORT, 10) ?? 3306
   }
   console.log(config)
   const adapterDB = new Database(config);

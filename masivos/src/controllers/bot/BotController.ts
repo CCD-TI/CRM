@@ -41,7 +41,7 @@ class BotController {
           `DB_USER=${DB_USER_MYSQL_DOCKER}`,
           `DB_NAME=${db_name}`, // Nueva DB específica del bot
           `DB_PASSWORD=${DB_PASSWORD_MYSQL_DOCKER}`,
-          `DB_PORT=3307`,
+          `DB_PORT=3306`,
           `HOST_RABBITMQ=${HOST_RABBITMQ}`,
           `USER_RABBITMQ=${USER_RABBITMQ}`,
           `PASSWORD_RABBITMQ=${PASSWORD_RABBITMQ}`,
