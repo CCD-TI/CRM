@@ -89,13 +89,15 @@ class LeadsController {
           throw new Error("No hay una hoja activa");
         }
         //const cursos = JSON.parse(masivolead!.masivo.flowResponder!.cursos);
-        console.log("cursos", masivolead!.masivo.flowResponderId);
-        const flagresponderseleccion = masivolead!.masivo.flowResponder!.cursos.length === 1;
-        const cursoselected = masivolead?.masivo.flagResponder ? flagresponderseleccion ? masivolead!.masivo.flowResponder!.cursos[0]: "Sin curso seleccionado"  : "Sin curso seleccionado";
-        await sheetInstance.addRow(phone, cursoselected, name);
+        
 
         if(masivolead?.masivo.flagResponder){
-
+          console.log("cursos", masivolead!.masivo.flowResponderId);
+          const flagresponderseleccion = masivolead!.masivo.flowResponder!.cursos.length === 1;
+          const cursoselected = masivolead?.masivo.flagResponder ? flagresponderseleccion ? masivolead!.masivo.flowResponder!.cursos[0]: "Sin curso seleccionado"  : "Sin curso seleccionado";
+          if(respuesta === "interesado"){
+            await sheetInstance.addRow(phone, cursoselected, name);
+          }
           const flowResponder = await Flows.findOne({
             where: {
               id: masivolead.masivo.flowResponderId
@@ -142,9 +144,12 @@ class LeadsController {
           }
 
 
+        }else{
+          const curso = masivolead?.masivo?.flows[0]?.cursos[0] ?? "SIN CURSO";
+          if(respuesta === "interesado"){
+            await sheetInstance.addRow(phone, curso, name);
+          }
         }
-        console.log("termino");
-        
 
       } else {
         console.warn(
