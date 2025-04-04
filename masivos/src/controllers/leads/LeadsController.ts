@@ -119,7 +119,7 @@ class LeadsController {
           console.log("Si llega >>>>>>>>>>>>>>");
           try {
             const botResponse = await fetch(
-              `http://localhost:${botResponder!.port}/v1/messages`,
+              `http://${botResponder!.containername}:3000/v1/messages`,
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
