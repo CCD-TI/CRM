@@ -4,6 +4,8 @@ export const waitForBot = async (port:number, retries:number = 10, delay:number 
       try {
         // Intentar conectarse al bot
         const host = process.env.HOST_INTERNAL ?? "172.18.0.1";
+        console.log(`Intentando conectar al bot en el puerto ${port}... (${i + 1}/${retries})`);
+        console.log(`http://${host}:${port}/v1/codigo`);
         const response = await fetch(`http://${host}:${port}/v1/codigo`);
         const respuesta = await response.json()
         if (response.ok) {

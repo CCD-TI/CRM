@@ -6,7 +6,7 @@ export class DatabaseManager {
       console.log("datos de conexion",
         {
           host: process.env.DB_HOST_MYSQL_DOCKER || "host.docker.internal", // Conectar al contenedor
-          port: parseInt(process.env.DB_PORT_DOCKER || "3307"),
+          port: parseInt(process.env.DB_PORT_DOCKER || "3306"),
           username: process.env.DB_USER_MYSQL_DOCKER || "root",
           password: process.env.DB_PASSWORD_MYSQL_DOCKER || "root",
           dialect: "mysql",
@@ -15,7 +15,7 @@ export class DatabaseManager {
       )
       const sequelize = new Sequelize({
         host: process.env.DB_HOST_MYSQL_DOCKER || "host.docker.internal", // Conectar al contenedor
-        port: parseInt(process.env.DB_PORT_DOCKER || "3307"),
+        port: parseInt(process.env.DB_PORT_DOCKER || "3306"),
         username: process.env.DB_USER_MYSQL_DOCKER || "root",
         password: process.env.DB_PASSWORD_MYSQL_DOCKER || "root",
         dialect: "mysql",
