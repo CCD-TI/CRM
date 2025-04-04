@@ -16,13 +16,20 @@ class BotController {
       const port = await getLastPort();
 
       const db_name = `bot_db_${phone}`;
-
+      
       await DatabaseManager.createDatabase(db_name);
 
       const docker = DockerService.getInstance().getDocker();
       console.log("SOCKET_PATH_DOCKER:", process.env.SOCKET_PATH_DOCKER);
       // Crear y correr un contenedor
       const { DB_HOST_MYSQL_DOCKER, HOST_RABBITMQ, USER_RABBITMQ, PASSWORD_RABBITMQ,DB_PASSWORD_MYSQL_DOCKER,DB_USER_MYSQL_DOCKER } = process.env;
+      console.log("DB_HOST_MYSQL_DOCKER:", DB_HOST_MYSQL_DOCKER);
+      console.log("DB_USER_MYSQL_DOCKER:", DB_USER_MYSQL_DOCKER);
+      console.log("DB_PASSWORD_MYSQL_DOCKER:", DB_PASSWORD_MYSQL_DOCKER);
+      console.log("")
+      console.log("HOST_RABBITMQ:", HOST_RABBITMQ);
+      console.log("USER_RABBITMQ:", USER_RABBITMQ);
+      console.log("PASSWORD_RABBITMQ:", PASSWORD_RABBITMQ);
 
       const container = await docker.createContainer({
         Image: imagebot, // Imagen del bot
@@ -37,7 +44,8 @@ class BotController {
           `HOST_RABBITMQ=${HOST_RABBITMQ}`,
           `USER_RABBITMQ=${USER_RABBITMQ}`,
           `PASSWORD_RABBITMQ=${PASSWORD_RABBITMQ}`,
-          `USE_PAIRING_CODE=${useparingcode}`
+          `USE_PAIRING_CODE=${useparingcode}`,
+          `RUTA_LOCAL_ORQUESTADOR=gateway`
           ],
         ExposedPorts: {
           "3000/tcp": {}, // Puerto expuesto dentro del contenedor
@@ -91,9 +99,9 @@ class BotController {
         port: newBot.port,
         pairingCode: newBot.pairingCode,
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al crear el bot:", error);
-      res.status(500).json({ error: "Error al crear el bot" });
+      res.status(500).json({ error: error.message , message: "Error al crear el bot"});
     }
   };
   deleteBot = async (req: any, res: any) => {

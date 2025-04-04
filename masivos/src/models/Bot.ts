@@ -17,7 +17,7 @@ export class Bot extends Model{
     @Column(DataType.INTEGER)
     port!: number;
 
-    @AllowNull(false)
+    @AllowNull(true)
     @Column(DataType.STRING)
     pairingCode!: string
 

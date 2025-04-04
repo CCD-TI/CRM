@@ -23,7 +23,7 @@ services:
       - "6379:6379"   # Puerto para Redis
   mysql:
     image: mysql:8
-    container_name: ${DB_HOST_MYSQL_DOCKER}
+    container_name: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD_MYSQL_DOCKER}
@@ -77,7 +77,7 @@ services:
       - DB_DIALECT=${DB_DIALECT}
       - DB_PORT=${DB_PORT}
       - ALTER=${ALTER}
-      - DB_HOST_DOCKER=${DB_HOST_DOCKER}
+      - DB_HOST_MYSQL_DOCKER=${DB_HOST_MYSQL_DOCKER}
       - DB_USER_MYSQL_DOCKER=${DB_USER_MYSQL_DOCKER}
       - DB_PASSWORD_MYSQL_DOCKER=${DB_PASSWORD_MYSQL_DOCKER}
       - DOCKER_HOST_DEMON=${DOCKER_HOST_DEMON}

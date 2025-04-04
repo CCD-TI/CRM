@@ -44,13 +44,7 @@ export class WebSocketBots {
             try {
 
               const data = await this.fetchWithTimeout(`http://172.18.0.1:${bot.port}/v1/codigo`, 5000); // 5 segundos de timeout
-              console.log(data)
-              //console.log("Datos recibidos:", { pairingCode: data.pairingCode, status: data.status });
-              console.log(data.pairingCode !== bot.pairingCode)
-              console.log(data.me === undefined)
-              console.log(data.pairingCode !== bot.pairingCode || data.me === undefined);
               if (data.me === undefined || data.me.lid === undefined) {
-                console.log("MARCA DESVINCULADO")
                   statuses.push({
                       containerId: bot.containerId,
                       phone: bot.phone,
@@ -64,7 +58,6 @@ export class WebSocketBots {
                       await Bot.update({ pairingCode: data.pairingCode }, { where: { id: bot.id } });
                   }
               } else {
-                console.log("marca vinculado")
                   statuses.push({ containerId: bot.containerId, phone: bot.phone, status: "activo" });
 
                   if (!bot.status) {

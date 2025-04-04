@@ -57,7 +57,7 @@ const main = async () => {
       user: process.env.DB_USER ?? 'paul',
       database: process.env.DB_NAME ?? 'bot_db_908911275',
       password: process.env.DB_PASSWORD ?? 'paulp',
-      port: 3306
+      port: 3307
     }
     console.log(config)
     const adapterDB = new Database(config);

@@ -140,7 +140,7 @@ const main = async () => {
     }
 
     console.log("Bot conectado a WhatsApp!");
-    //await startRabbitConsumer(adapterProvider, ruta_local_orquestador);
+    await startRabbitConsumer(adapterProvider, ruta_local_orquestador);
     
     LimpiezaSession();
   };
