@@ -1,10 +1,10 @@
 
 import { Op } from "sequelize";
-import DatabaseManager from "../../config/DatabaseManager";
 import { Bot } from "../../models/Bot";
 import DockerService from "../../services/DockerService";
 import { waitForBot } from "../../utils/WaitBot";
 import { getLastPort } from "../../utils/getLastPort";
+import { DatabaseManager } from "../../config/DatabaseManager";
 
 class BotController {
   createBot = async (req: any, res: any) => {
@@ -17,10 +17,10 @@ class BotController {
 
       const db_name = `bot_db_${phone}`;
 
-      await DatabaseManager.createDatabase(db_name);
-
+      const flag = await DatabaseManager.createDatabase(db_name);
+      if(!flag) res.status(500).json({ message: "Error al crear la DB para el bot"});
       const docker = DockerService.getInstance().getDocker();
-      console.log("SOCKET_PATH_DOCKER:", process.env.SOCKET_PATH_DOCKER);
+      console.log("DOCKER_HOST_DEMON:", process.env.DOCKER_HOST_DEMON);
       // Crear y correr un contenedor
       const { DB_HOST_MYSQL_DOCKER, HOST_RABBITMQ, USER_RABBITMQ, PASSWORD_RABBITMQ,DB_PASSWORD_MYSQL_DOCKER,DB_USER_MYSQL_DOCKER } = process.env;
       console.log("DB_HOST_MYSQL_DOCKER:", DB_HOST_MYSQL_DOCKER);

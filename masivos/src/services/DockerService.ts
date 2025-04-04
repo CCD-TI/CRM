@@ -5,7 +5,7 @@ class DockerService {
   private docker: Docker;
 
   private constructor() {
-    console.log("SOCKET_PATH_DOCKER:", process.env.SOCKET_PATH_DOCKER);
+    console.log("DOCKER_HOST_DEMON:", process.env.DOCKER_HOST_DEMON);
     const dockerhost = process.env.DOCKER_HOST_DEMON ?? 'host.docker.internal' ;
     
     this.docker = new Docker({
