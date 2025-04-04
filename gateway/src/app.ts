@@ -36,7 +36,6 @@ class App {
     const storageServiceUrl = process.env.STORAGE_SERVICE_URL ?? "http://host.docker.internal:8004";
     const usuariosServiceUrl = process.env.USUARIOS_SERVICE_URL ?? "http://host.docker.internal:8005";
     const mailingServiceUrl = process.env.MAILING_SERVICE_URL ?? "http://host.docker.internal:8005";
-    const host = process.env.HOST_INTERNAL ?? "172.18.0.1";
 
     console.log("masivoServiceUrl", masivoServiceUrl);
     console.log("gestorServiceUrl", gestorServiceUrl);
@@ -44,7 +43,6 @@ class App {
     console.log("storageServiceUrl", storageServiceUrl);
     console.log("usuariosServiceUrl", usuariosServiceUrl);
     console.log("mailingServiceUrl", mailingServiceUrl);
-    console.log("host", host);
     this.server.use(
       "/api/masivo",
       createProxyMiddleware({
@@ -113,9 +111,9 @@ class App {
         if (!port || isNaN(Number(port))) {
           return res.status(400).json({ error: "Invalid port provided" });
         }
-        console.log(`redirigiendo qr a http://${host}:${port}`);
+        console.log(`redirigiendo qr a http://${port}:3000`);
         const proxy = createProxyMiddleware({
-          target: `http://${host}:${port}`, // Define el puerto dinámicamente
+          target: `http://${port}:3000`, // Define el puerto dinámicamente
           changeOrigin: true,
           pathRewrite: { "^/api/qrmasivo/\\d+": "" }, // Elimina "/api/qrmasivo/{port}"
         });
