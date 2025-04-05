@@ -47,35 +47,6 @@ export class GoogleSheet {
     try {
       console.log("datos que e envian a sheet: ",{num, camp, name});
       const sheet = this.doc.sheetsById[this.sheetId];
-
-    // Suponiendo que "NUMERO" está en la columna A y la hoja tiene N filas
-    const cellRange = `C1:C${sheet.rowCount}`; // omitiendo encabezado
-    await sheet.loadCells(cellRange);
-    
-    let rowIndex: number | null = null;
-    // Iterar solo por las celdas de la columna NUMERO
-    for (let row = 1; row < sheet.rowCount; row++) {
-      const cell = sheet.getCell(row, 2); // columna A = índice 0
-      if (cell.value == num) {
-        rowIndex = row;
-        break;
-      }
-    }
-    if (rowIndex !== null) {
-      // Si se encontró, actualiza esa fila
-      // Cargar la fila completa (o actualizar directamente las celdas correspondientes)
-      await sheet.loadCells(`A${rowIndex + 1}:G${rowIndex + 1}`);
-      sheet.getCell(rowIndex, 0).value = new Date().toLocaleString("es-PE", { timeZone: "America/Lima" });
-      if(name != null){
-        sheet.getCell(rowIndex, 1).value = name;
-      }
-      sheet.getCell(rowIndex, 2).value = num;
-      sheet.getCell(rowIndex, 4).value = camp; 
-      sheet.getCell(rowIndex, 5).value = "Whatsapp";
-      sheet.getCell(rowIndex, 6).value = "Mensaje Enviado"; 
-      await sheet.saveUpdatedCells();
-    } else {
-      // Si no se encontró, agrega la fila
       await sheet.addRow({
         FECHA: new Date().toLocaleString("es-PE", { timeZone: "America/Lima" }),
         NOMBRE: name ? name : "SIN NOMBRE",
@@ -84,7 +55,6 @@ export class GoogleSheet {
         RED: "Whatsapp",
         MENSAJE: "Mensaje Enviado",
       });
-    }
     } catch (error: any) {
       console.log("error al enviar sheet: ", error.message)
     }

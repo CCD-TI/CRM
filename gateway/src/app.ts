@@ -108,7 +108,7 @@ class App {
       "/api/qrmasivo/:port",
       (req, res, next) => {
         const port = req.params.port; // Extrae el puerto de la URL
-        if (!port || isNaN(Number(port))) {
+        if (!port) {
           return res.status(400).json({ error: "Invalid port provided" });
         }
         console.log(`redirigiendo qr a http://${port}:3000`);
