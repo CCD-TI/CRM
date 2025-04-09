@@ -588,12 +588,24 @@ export class GestorController {
   sharedFolderById = async (req: any, res: any)=> {
     try {
       const { name, userId, path, accessType }= req.body;
-      await SharedFolders.create({
+      const shared = await SharedFolders.findOne({where: {
         userId,
-        name: name !== '' ? name : 'root',
-        path,
-        accessType
-      });
+        path
+      }})
+      if(shared){
+        await shared.update(
+          {
+            accessType
+          }
+        )
+      }else{  
+        await SharedFolders.create({
+          userId,
+          name: name !== '' ? name : 'root',
+          path,
+          accessType
+        });
+      }
       return res.status(200).json({message: 'compartido correctamente'});
     } catch (error: any) {
       return res.status(500).json({ message: "error interno del servidor", error: error.message })
