@@ -1,8 +1,12 @@
 import {
+  AbortMultipartUploadCommand,
+  CompleteMultipartUploadCommand,
   CopyObjectCommand,
+  CreateMultipartUploadCommand,
   DeleteObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
+  UploadPartCommand,
 } from "@aws-sdk/client-s3";
 import { BUCKET_NAME, s3 } from "../config/s3Config";
 import mime from "mime-types";
@@ -10,7 +14,9 @@ import path from "path";
 import { SharedFolders } from "../models/SharedFolders";
 import { Historial } from "../models/historial";
 import { User } from "../models/User";
+import fs from "fs";
 export class GestorController {
+  constructor(){}
   listObjects = async (_req: any, res: any) => {
     // ListObjectsV2Command
     const data = await s3.send(
@@ -192,7 +198,9 @@ export class GestorController {
       const foldername = path.split("/").filter(Boolean).pop() || "Unnamed Folder";
       const uploadedResults = await Promise.all(
         uploadedFiles.map(async (file: any) => {
-          const fileBuffer = file.buffer; // Obtener el buffer del archivo
+          //const fileBuffer = file.buffer; // Obtener el buffer del archivo
+          const filePath = file.path;
+          const fileStream = fs.createReadStream(filePath);
           const slash = newfolder ? '/': '/';
           const uniqueFileName =  `${path}${slash}${
             file.originalname
@@ -203,14 +211,22 @@ export class GestorController {
           console.log(path);
           console.log(file.originalname);
           console.log(uniqueFileName);
-          await s3.send(
-            new PutObjectCommand({
-              Bucket: BUCKET_NAME,
-              Key: uniqueFileName,
-              Body: fileBuffer,
-              ContentType: contentType,
-            })
-          );
+          if(file.size > 200 * 1024 * 1024){
+            await this.uploadFileByParts(file, uniqueFileName);
+          }else{
+            await s3.send(
+              new PutObjectCommand({
+                Bucket: BUCKET_NAME,
+                Key: uniqueFileName,
+                Body: fileStream,
+                ContentType: contentType,
+              })
+            );
+          }
+          
+          fs.unlink(filePath, (err) => {
+            if (err) console.error("Error deleting temp file:", err);
+          });
           await Historial.create({
             userId,
             accion: "upload",
@@ -267,6 +283,139 @@ export class GestorController {
       res.status(500).json({ success: false, message: "Error uploading file" });
     }
   };
+
+
+  async uploadFileByParts(file: any, key: string) {
+    let uploadId = '';
+  
+    try {
+      // 1. Inicia el Multipart Upload
+      const createUploadCommand = new CreateMultipartUploadCommand({
+        Bucket: BUCKET_NAME,
+        Key: key,
+        ContentType: file.mimetype,
+      });
+      const createUploadResponse = await s3.send(createUploadCommand);
+      uploadId = createUploadResponse.UploadId!;
+      console.log(`🟢 Multipart upload iniciado. UploadId: ${uploadId}`);
+  
+      // 2. Obtener el tamaño del archivo desde disco
+      const { size: fileSize } = fs.statSync(file.path);
+      const partSize = 200 * 1024 * 1024; // 200MB por parte
+      const numParts = Math.ceil(fileSize / partSize);
+  
+      // 3. Función para subir una sola parte
+      const uploadPart = async (partNumber: number, maxRetries = 3): Promise<{ ETag: string; PartNumber: number; }> => {
+        let attempt = 0;
+        while (attempt < maxRetries) {
+          try {
+            const start = (partNumber - 1) * partSize;
+            const end = Math.min(partNumber * partSize, fileSize) - 1;
+            const partStream = fs.createReadStream(file.path, { start, end });
+      
+            const uploadPartCommand = new UploadPartCommand({
+              Bucket: BUCKET_NAME,
+              Key: key,
+              PartNumber: partNumber,
+              UploadId: uploadId,
+              Body: partStream,
+            });
+      
+            const response = await s3.send(uploadPartCommand);
+            console.log(`✅ Parte ${partNumber} subida con éxito. ETag: ${response.ETag}`);
+            return {
+              ETag: response.ETag!,
+              PartNumber: partNumber,
+            };
+          } catch (err: any) {
+            attempt++;
+            console.warn(`⚠️ Reintento ${attempt} para parte ${partNumber} por error:`, err?.Code || err?.message);
+      
+            if (attempt >= maxRetries) {
+              console.error(`❌ Falló la parte ${partNumber} tras ${maxRetries} intentos`);
+              throw err;
+            }
+      
+            // Espera exponencial antes de reintentar
+            const backoff = 1000 * Math.pow(2, attempt); // 1s, 2s, 4s...
+            await new Promise(res => setTimeout(res, backoff));
+          }
+        }
+        throw new Error(`Parte ${partNumber} falló sin recuperación`); // No debería llegar aquí
+      };
+  
+      // 4. Crear tareas limitadas en concurrencia
+      const tasks = Array.from({ length: numParts }, (_, i) => () => uploadPart(i + 1));
+      const rawParts = await this.limitPromises(tasks, 8);
+  
+      // 5. Validar partes recibidas
+      const parts = rawParts.filter(Boolean).map(p => ({
+        ETag: p!.ETag,
+        PartNumber: Number(p!.PartNumber),
+      }));
+  
+      if (parts.length !== numParts) {
+        throw new Error(`Número de partes incompleto: esperadas ${numParts}, recibidas ${parts.length}`);
+      }
+  
+      // 6. Completar Multipart Upload
+      const completeCommand = new CompleteMultipartUploadCommand({
+        Bucket: BUCKET_NAME,
+        Key: key,
+        UploadId: uploadId,
+        MultipartUpload: {
+          Parts: parts.sort((a, b) => a.PartNumber - b.PartNumber),
+        },
+      });
+  
+      const completeResponse = await s3.send(completeCommand);
+      console.log("✅ Archivo subido correctamente:", completeResponse);
+  
+    } catch (error) {
+      if (uploadId) {
+        console.error("⚠️ Error durante la subida, abortando la carga...");
+        try {
+          const abortCommand = new AbortMultipartUploadCommand({
+            Bucket: BUCKET_NAME,
+            Key: key,
+            UploadId: uploadId,
+          });
+          await s3.send(abortCommand);
+          console.log("⛔ Multipart upload abortado.");
+        } catch (abortError) {
+          console.error("❌ Error al abortar el upload:", abortError);
+        }
+      }
+      console.error("🛑 Upload error:", error);
+      throw new Error("Error al subir el archivo");
+    }
+  }
+  async limitPromises<T>(tasks: (() => Promise<T>)[], concurrency: number): Promise<T[]> {
+    const results: T[] = new Array(tasks.length);
+    let index = 0;
+  
+    async function runTask(): Promise<void> {
+      const currentIndex = index++;
+      if (currentIndex >= tasks.length) return;
+      try {
+        results[currentIndex] = await tasks[currentIndex]();
+      } catch (error) {
+        // Si prefieres propagar el error, puedes re-lanzarlo
+        // o asignarlo a results[currentIndex] como error forzado
+        results[currentIndex] = error as unknown as T;
+      }
+      await runTask();
+    }
+  
+    // Declaramos runners como un array de Promise<void>
+    const runners: Promise<void>[] = [];
+    for (let i = 0; i < Math.min(concurrency, tasks.length); i++) {
+      runners.push(runTask());
+    }
+  
+    await Promise.all(runners);
+    return results;
+  }
   delete = async (req: any, res: any) => {
     try {
       const { paths, userId } = req.body; // Lista de archivos a eliminar
@@ -394,6 +543,7 @@ export class GestorController {
               thumbnailUrl: contentType.includes("image")
                 ? `https://pub-9d2abfa175714e64aed33b90722a9fd5.r2.dev/${content.Key}`
                 : null,
+              path: content.Key,
               uploadDate: content.LastModified || new Date(),
               modifiedDate: content.LastModified || new Date(),
               folderId: null,
